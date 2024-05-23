@@ -12,7 +12,12 @@ import { ElMenuItem, ElSubMenu, ElDialog} from "element-plus";
 import NotificationPopup from "@/components/NotificationPopup.vue";
 
 changeTheme("#00bfa8")
-
+const glycemiaClick = () => {
+    console.log("111111");
+    router.push("/BloodSugar").catch(err => {
+        console.error("Navigation error:", err);
+    });
+}
 function loginButtonClicked() {
     router.push("/login")
 }
@@ -184,11 +189,11 @@ watch(router.currentRoute, () => {
             <div class="rightTitle" v-if="isLogin">
                 <img alt="" src="/static/titleImg1.png">
                 <el-popover :width="360"
-                    popper-style="box-shadow: 0 5px 20px hsla(0,0%,7%,.1);padding: 0; transition: opacity 0.3s;"
-                    trigger="click" @before-enter="updateNotifications">
+                            popper-style="box-shadow: 0 5px 20px hsla(0,0%,7%,.1);padding: 0; transition: opacity 0.3s;"
+                            trigger="click" @before-enter="updateNotifications">
                     <template #reference>
                         <LinkButtonWithIcon font-color="#fff" text="消息通知" icon="fi-rr-bell"
-                            :has-notification="userInfo.data.unread_notification" @click="notificationButtonClicked">
+                                            :has-notification="userInfo.data.unread_notification" @click="notificationButtonClicked">
                         </LinkButtonWithIcon>
                     </template>
                     <template #default>
@@ -206,11 +211,11 @@ watch(router.currentRoute, () => {
                 <LinkButtonWithIcon font-color="#fff" text="登录/注册" icon="" @click="loginButtonClicked"></LinkButtonWithIcon>
             </div>
 
-            <el-dialog 
-                v-model="helpVisible"
-                title="用户使用指南"
-                width="80%"
-                draggable>
+            <el-dialog
+                    v-model="helpVisible"
+                    title="用户使用指南"
+                    width="80%"
+                    draggable>
                 <div style="float:left;text-align: left;font-size: medium;margin: 20px;">
                     <p>欢迎您加入HelloHealth健康管理平台，一个全面的健康管理解决方案，专为追求健康生活、管理健康信息和分享健康经验的用户设计。遵循以下步骤，您可以轻松掌握平台的各项功能：</p>
                     <h3 class="document_h2">创建您的账户</h3>
@@ -253,19 +258,21 @@ watch(router.currentRoute, () => {
 
                 <el-menu v-if="loadComplete" :default-active="getSidebarPath()" class="sideBarMenu" ref="menu">
                     <component v-for="item in menus.v" :is="item.children ? ElSubMenu : ElMenuItem" :index="item.path"
-                        v-on="item.children ? {} : { click: menuItemClick }">
+                               v-on="item.children ? {} : { click: menuItemClick }">
                         <template #title>
                             <i class="fi" :class="item.icon"></i>
                             <span>{{ item.title }}</span>
                         </template>
                         <el-menu-item v-if="item.children" v-for="child in item.children" :index="child.path"
-                            @click="menuItemClick">
+                                      @click="menuItemClick">
                             <i class="fi" :class="child.icon"></i>
                             <span>{{ child.title }}</span>
                         </el-menu-item>
                     </component>
                 </el-menu>
-
+                <div>
+                    <button @click="glycemiaClick">glycemia</button>
+                </div>
                 <img class="menuImg" alt="" :src="menuImgSrc" />
 
                 <div class="beian">
@@ -279,20 +286,23 @@ watch(router.currentRoute, () => {
             </div>
 
             <div class="area">
-                    <ul class="circles">
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                </div>
+                <ul class="circles">
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
         </div>
+    </div>
+    <div>
+        <button @click="glycemiaClick">glycemia</button>
     </div>
 </template>
 
@@ -420,7 +430,7 @@ watch(router.currentRoute, () => {
 /* background setting */
 .area{
     background: linear-gradient(to bottom, var(--el-color-primary-light-9), #ddf4ff);
-    /*background: var(--el-color-primary-light-9);  
+    /*background: var(--el-color-primary-light-9);
     background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);  */
     width: 100%;
     height:100vh;
@@ -446,7 +456,7 @@ watch(router.currentRoute, () => {
     background: rgba(12, 133, 119, 0.5);
     animation: animate 25s linear infinite;
     bottom: -150px;
-    
+
 }
 
 .circles li:nth-child(1){

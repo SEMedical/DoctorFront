@@ -1,5 +1,5 @@
 <template>
-    <div class="boxWrapper">
+    <div class="boxWrapper" >
         <div class="content">
             <el-button class="closeButton" type="primary" link @click="goHome"><i class="fi fi-br-cross"></i></el-button>
             <div class="wrapper">
@@ -11,7 +11,6 @@
 </template>
 
 <script setup>
-
 const goHome = () => {
     window.location.href='/'
 }

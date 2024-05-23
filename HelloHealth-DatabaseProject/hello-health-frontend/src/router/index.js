@@ -22,6 +22,11 @@ const router = createRouter({
                     name: "forgotView",
                     component: ()=>import("@/views/ForgotView.vue"),
                 }
+                ,{
+                    path: "666",
+                    name: "666",
+                    component: () => import("@/views/glycemia.vue")
+                }
             ]
         },
         {
@@ -89,6 +94,10 @@ const router = createRouter({
                 path:"Trajectory",
                 name:"Trajectory",
                 component:()=>import("@/views/TrajectoryView.vue")
+            },{
+                path:"BloodSugar",
+                name:"BloodSugar",
+                component:() => import("@/views/glycemia.vue")
             }]
         },
         { path: '/:pathMatch(.*)*', name: 'NotFound', component: ()=>import("@/pages/ErrorPage.vue") },
