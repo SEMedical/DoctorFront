@@ -60,7 +60,7 @@ const onSubmit = () => {
         isError.value = true
         return
     }
-    axios.post("/api/Login",loginCredential).then(response => {
+    axios.post("/api/login/pass",loginCredential).then(response => {
         isError.value = false;
         errorMsg.value = ''
         router.push("/")
