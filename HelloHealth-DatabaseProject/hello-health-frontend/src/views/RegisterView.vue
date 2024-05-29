@@ -13,7 +13,7 @@
             <el-input v-model="registerCredential.name" @click="clearErrorBorder" />
         </el-form-item>
         <el-form-item label="手机号" v-bind:class="{ error: isError }">
-            <el-input v-model="registerCredential.user_phone" @click="clearErrorBorder" />
+            <el-input v-model="registerCredential.contact" @click="clearErrorBorder" />
         </el-form-item>
         <el-form-item label="密码" v-bind:class="{ error: isError }">
             <el-input v-model="registerCredential.password" type="password" @click="clearErrorBorder" show-password/>
@@ -47,7 +47,7 @@ changeTheme('#93b27b')
 
 const registerCredential = reactive({
     name: '',
-    user_phone: '',
+    contact: '',
     password: '',
 })
 
@@ -56,6 +56,7 @@ const repeatPassword = ref('')
 const errorMsg = ref('')
 const isError = ref(false)
 const onSubmit = () => {
+    console.log("111111")
     errorMsg.value = ''
     isError.value = false
 
@@ -64,11 +65,11 @@ const onSubmit = () => {
         errorMsg.value = '请输入用户名！'
         isError.value = true
         return
-    } else if (registerCredential.user_phone === '') {
+    } else if (registerCredential.contact === '') {
         errorMsg.value = '请输入手机号！'
         isError.value = true
         return
-    } else if (!regPhone.test(registerCredential.user_phone)) {
+    } else if (!regPhone.test(registerCredential.contact)) {
         errorMsg.value = '请输入正确的手机号！'
         isError.value = true
         return
@@ -77,19 +78,31 @@ const onSubmit = () => {
         isError.value = true
         return
     }
+    console.log("上面都通过")
     axios.post('/api/register/patient', registerCredential).then( response =>{
         isError.value = false
         errorMsg.value = ''
         alert('注册成功！')
         router.push("/login")
     }).catch( error => {
+        console.log("err")
+        console.log(error)
         if(error.network) return;
-        if(!error.is_success){
-            errorMsg.value = error.msg
-            isError.value = true;
-        }
-        else{
-            error.defaultHandler()
+        switch(error.errorCode) {
+            case 101:
+                errorMsg.value = '验证码错误！'
+                isError.value = true;
+                break;
+            case 102:
+                errorMsg.value = '用户已存在！'
+                isError.value = true
+                break;
+            case 103:
+                errorMsg.value = '用户名重复，请重新设定用户名！'
+                isError.value = true
+                break;
+            default:
+                error.defaultHandler()
         }
     })
 }
