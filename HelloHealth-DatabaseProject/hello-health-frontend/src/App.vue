@@ -16,7 +16,9 @@ axios.interceptors.request.use((config) => {
 //请求错误或者返回时自动清除加载界面
 axios.interceptors.response.use(function (response) {
     loadingScreen.endLoading()
-    if(response.data.errorCode!==200){
+    console.log("response data",response.data)
+    console.log("response.data.success:",response.data.success)
+    if(response.data.success === false){
         return Promise.reject({
             network: false,
             response: response,
@@ -46,7 +48,9 @@ axios.interceptors.response.use(function (response) {
             }
         });
     }else{
-        response.json = response.data.data
+        response.json = response.data;
+        console.log("response.josn:",response.json)
+        console.log("response",response)
         return response
     }
 }, function (error) {
