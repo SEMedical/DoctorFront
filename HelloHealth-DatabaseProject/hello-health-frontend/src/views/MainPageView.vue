@@ -6,7 +6,7 @@
             <div class="main">
                 <div class="text-content">
                     <div class="main-welcome">
-                        <div class="welcome animate__animated animate__fadeInTopRight">Welcome To<br />HelloHealth</div>
+                        <div class="welcome animate__animated animate__fadeInTopRight">Welcome To<br />糖小智</div>
 
                         <div class="contenttext  animate__animated animate__fadeInBottomLeft">
                             <p>探寻健康之门，启程HelloHealth</p>

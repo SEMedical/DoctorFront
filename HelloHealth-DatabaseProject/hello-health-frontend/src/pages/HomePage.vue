@@ -69,8 +69,9 @@ let userInfo = reactive({
         user_id: 123456,
         user_group: "none",
         avatar_url: "/static/defaultAvatar.png",
-        unread_notification: false,
-        verified: false
+        title:"",
+        department:"",
+        hospital_name:"",
     }
 
 });
@@ -79,12 +80,17 @@ const isLogin = ref(false);
 const loadComplete = ref(true);
 const gotUserInfo = ref(false)
 
-axios.get("/api/UserInfo").then(response => {
+axios.get("/api/interaction/DoctorInfo").then(response => {
+    console.log("HomePage")
     let responseObj = response.json
+    console.log("responseObj:",responseObj)
+    console.log("login:",responseObj.response.login)
+    console.log("mes:",responseObj.message)
+    console.log("obj:",responseObj.response)
     isLogin.value = responseObj.login;
 
     gotUserInfo.value = true
-    if (!responseObj.login) return;
+    if (!responseObj.response.login) return;
     menus.v = [
         { "title": "HH 首页", "icon": "fi-rr-home", "path": "/" },
         { "title": "HH 找药", "icon": "fi-rr-capsules", "path": "/medicine" },
@@ -107,7 +113,7 @@ axios.get("/api/UserInfo").then(response => {
     }, 0)
     globalData.login = true;
     globalData.locked = responseObj.locked
-    userInfo.data = responseObj
+    userInfo.data = responseObj.response
     globalData.userInfo = userInfo.data
 }).catch(error => {
     if (error.network) return
