@@ -79,10 +79,8 @@ export default {
             highStatistic:ref([]),        // 存储高血糖概率值
             normalStatistic: ref([]),   //存储正常血糖概率值
             lowStatistic: ref([]),    //存储低血糖概率值
-            //存储当周的血糖数据
-            weeklyBloodSugar:[],
-            dayBloodSugar:[],
-            monthBloodSugar:[],
+            bloodSugar:[],
+            seriesName:"Blood Sugar",
         }
     },
     mounted(){
@@ -109,13 +107,13 @@ export default {
                         this.highStatistic = responseObj.response.highSta.toFixed(2);
                         this.normalStatistic = responseObj.response.normalSta.toFixed(2);
                         this.lowStatistic =responseObj.response.lowSta.toFixed(2);
-                        this.dayBloodSugar =[];
+                        this.bloodSugar =[];
                         responseObj.response.entry.forEach(item => {
                             console.log("daytime:",item.time)
                             console.log("dayvalue:",item.value)
                             const time = item.time; // 直接访问 item 对象的 time 属性
                             const value = item.value; // 直接访问 item 对象的 value 属性
-                            this.dayBloodSugar.push({ time: time, value: value });
+                            this.bloodSugar.push({ time: time, value: value });
                         });
                         // 获取数据完毕，接下来进行绘图
                         this.drawChart();
@@ -134,22 +132,22 @@ export default {
                             startDate:this.startDate
                         }
                     }).then(response => {
+                        console.log("week glycemia")
                         let responseObj = response.json
-                        this.highStatistic =responseObj.response.hyperglycemiaPercentage.toFixed(2);
-                        this.lowStatistic = responseObj.response.hypoglycemiaPercentage.toFixed(2);
-                        this.normalStatistic = responseObj.response.euGlycemiaPercentage.toFixed(2);
-                        this.weeklyBloodSugar=[];
-                        responseObj.response.data.forEach(item=>{
-                                const time=Object.keys(item)[0];
-                                const value=item[time];
-
-                                console.log("Time"+time);
-                                const entry = {
-                                    min_val: value.minValue,
-                                    max_val: value.maxValue,
-                                    time: value.time
-                                };
-                                this.weeklyBloodSugar.push(entry);
+                        console.log("responseObj.response:",responseObj.response)
+                        console.log("responseObj.response.hyperPercentage:",responseObj.response.hyper_percent)
+                        this.highStatistic =responseObj.response.hyper_percent.toFixed(2);
+                        this.lowStatistic = responseObj.response.hypo_percent.toFixed(2);
+                        this.normalStatistic = responseObj.response.eu_percent.toFixed(2);
+                        this.bloodSugar=[];
+                        responseObj.response.entry.forEach(item=>{
+                            console.log("weektime:",item.time)
+                            console.log("min value:",item.min_val)
+                            console.log("max value:",item.max_val)
+                            const time = item.time; // 直接访问 item 对象的 time 属性
+                            const min_val = item.min_val; // 直接访问 item 对象的 value 属性
+                            const max_val = item.max_val;
+                            this.bloodSugar.push({ time: time, min_val: min_val,max_val:max_val });
                             }
                         );
                         // 获取数据完毕，接下来进行绘图
@@ -170,26 +168,20 @@ export default {
                         }
                     }).then(response =>{
                         let responseObj = response.json
-                        this.highStatistic =responseObj.response.hyperglycemiaPercentage.toFixed(2);
-                        this.normalStatistic = responseObj.response.euGlycemiaPercentage.toFixed(2);
-                        this.lowStatistic = responseObj.response.hypoglycemiaPercentage.toFixed(2);
-                        this.monthBloodSugar = [];
-                        responseObj.response.data.forEach(item=>{
-                                const time=Object.keys(item)[0];
-                                const value=item[time];
-
-                                console.log("Time"+time);
-                                const entry = {
-                                    min_val: value.minValue,
-                                    max_val: value.maxValue,
-                                    time: value.time
-                                };
-                                this.monthBloodSugar.push(entry);
+                        this.highStatistic =responseObj.response.hyper_percent.toFixed(2);
+                        this.lowStatistic = responseObj.response.hypo_percent.toFixed(2);
+                        this.normalStatistic = responseObj.response.eu_percent.toFixed(2);
+                        this.bloodSugar = [];
+                        responseObj.response.entry.forEach(item=>{
+                            console.log("month time:",item.time)
+                            console.log("min value:",item.min_val)
+                            console.log("max value:",item.max_val)
+                            const time = item.time; // 直接访问 item 对象的 time 属性
+                            const min_val = item.min_val; // 直接访问 item 对象的 value 属性
+                            const max_val = item.max_val;
+                            this.bloodSugar.push({ time: time, min_val: min_val,max_val:max_val });
                             }
                         );
-                        this.monthBloodSugar.forEach(item=>{
-                            console.log(Object.keys(item)[0]);
-                        })
                         // 获取数据完毕，接下来进行绘图
                         this.drawChart();
                     }).catch(error => {
@@ -215,18 +207,18 @@ export default {
                 let responseObj = response.json
                 console.log("BBB response:",responseObj)
                 console.log("BBB response.response:",responseObj.response)
-                this.dayBloodSugar.value =responseObj.response;
+                this.bloodSugar.value =responseObj.response;
 
                 responseObj.response.entry.forEach((item)=>{
                     console.log(item.time)
                     console.log(item.value)
                     const time = item.time; // 直接访问 item 对象的 time 属性
                     const value = item.value; // 直接访问 item 对象的 value 属性
-                    this.dayBloodSugar.push({ time: time, value: value });
+                    this.bloodSugar.push({ time: time, value: value });
                     }
                 );
                 //const val=item[time];
-                console.log("Response****"+this.dayBloodSugar[0].time);
+                console.log("Response****"+this.bloodSugar[0].time);
                 // 获取数据完毕，接下来进行绘图
                 this.drawChart();
             }).catch(error => {
@@ -263,21 +255,56 @@ export default {
                 case 0:{
                     // 日记录
                     console.log("Graphic:dayBloodSugar")
-                    timeArray = this.dayBloodSugar.map(entry => {
+                    timeArray = this.bloodSugar.map(entry => {    // 只保留时和分
                         let date = new Date(entry.time); // 解析时间字符串
                         return date.toLocaleTimeString('en-CA', { hour12: false, hour: '2-digit', minute: '2-digit' });
                     });
                     console.log("timeArray:",timeArray)
-                    valueArray = this.dayBloodSugar.map(entry => entry.value)
+                    valueArray = this.bloodSugar.map(entry => entry.value)
                     console.log("valueArray",valueArray)
+                    this.seriesName="Blood Sugar"
                     break;
                 }
                 case 1:{
                     // 周记录
+                    console.log("Graphic:weekBloodSugar")
+                    // 使用 map 方法从 this.bloodSugar 数组中提取年月日
+                    timeArray = this.bloodSugar.map(entry => {
+                        // 解析时间字符串
+                        let date = new Date(entry.time);
+                        // 获取年月日，格式化为 'YYYY-MM-DD' 格式
+                        let year = date.getFullYear();
+                        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // getMonth() 返回的月份是从 0 开始的
+                        let day = date.getDate().toString().padStart(2, '0');
+                        return `${year}-${month}-${day}`;
+                    });
+                    console.log("timeArray:",timeArray)
+                    valueArray = this.bloodSugar.map(entry => entry.max_val)
+                    console.log("max valueArray",valueArray)
+                    minValue = this.bloodSugar.map(entry => entry.min_val)
+                    console.log("min valueArray",minValue)
+                    this.seriesName="Maximum Blood Sugar"
                     break;
                 }
                 case 2:{
                     // 月记录
+                    console.log("Graphic:monthBloodSugar")
+                    // 使用 map 方法从 this.bloodSugar 数组中提取年月日
+                    timeArray = this.bloodSugar.map(entry => {
+                        // 解析时间字符串
+                        let date = new Date(entry.time);
+                        // 获取年月日，格式化为 'YYYY-MM-DD' 格式
+                        let year = date.getFullYear();
+                        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // getMonth() 返回的月份是从 0 开始的
+                        let day = date.getDate().toString().padStart(2, '0');
+                        return `${year}-${month}-${day}`;
+                    });
+                    console.log("timeArray:",timeArray)
+                    valueArray = this.bloodSugar.map(entry => entry.max_val)
+                    console.log("max valueArray",valueArray)
+                    minValue = this.bloodSugar.map(entry => entry.min_val)
+                    console.log("min valueArray",minValue)
+                    this.seriesName="Maximum Blood Sugar"
                     break;
                 }
                 default:{
@@ -327,7 +354,7 @@ export default {
                 ],
                 series: [
                     {
-                        name: 'Blood sugar',
+                        name: this.seriesName,
                         type: 'line',
                         symbol: 'none',
                         sampling: 'lttb',
@@ -347,6 +374,28 @@ export default {
                             ])
                         },
                         data: valueArray
+                    },
+                    {
+                        name: 'Minimum Blood sugar',
+                        type: 'line',
+                        symbol: 'none',
+                        sampling: 'lttb',
+                        itemStyle: {
+                            color: 'rgb(127,255,170)'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: 'rgb(64,224,208)'
+                                },
+                                {
+                                    offset: 1,
+                                    color: 'rgb(127,255,170)'
+                                }
+                            ])
+                        },
+                        data: minValue
                     }
                 ]
             };
