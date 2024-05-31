@@ -35,7 +35,7 @@
                         <el-col>
                             <el-form-item prop="startDate" style="margin-bottom: 0">
                                 <el-date-picker type="date" format="YYYY/MM/DD" value-format="YYYY/MM/DD" placeholder="选择日期"
-                                                v-model="startDate" style="width: 100%">
+                                                v-model="startDate" style="width: 100%" :disabled-date="disabledDate">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
@@ -50,6 +50,7 @@
 
                 <div class="BDGraphic">
                     <div id="main" style="width: 100%; height: 500px"></div>
+                    <div class="statistic">高血糖占比：{{this.highStatistic}}%，正常血糖占比：{{this.normalStatistic}}%，低血糖占比：{{this.lowStatistic}}%</div>
                 </div>
             </el-card>
         </div>
@@ -198,31 +199,27 @@ export default {
         },
         getTodayBloodSugarData(){
             // 获取血糖数据
-            axios.get("/api/glycemia/chart",{
+            axios.get("/api/glycemia/dailyHistory",{
                 params:{
-                    type:'realtime',
                     date:this.startDate
                 }
-            }).then(response =>{
+            }).then(response => {
                 let responseObj = response.json
-                console.log("BBB response:",responseObj)
-                console.log("BBB response.response:",responseObj.response)
-                this.bloodSugar.value =responseObj.response;
-
-                responseObj.response.entry.forEach((item)=>{
-                    console.log(item.time)
-                    console.log(item.value)
+                this.highStatistic = responseObj.response.highSta.toFixed(2);
+                this.normalStatistic = responseObj.response.normalSta.toFixed(2);
+                this.lowStatistic =responseObj.response.lowSta.toFixed(2);
+                this.bloodSugar =[];
+                responseObj.response.entry.forEach(item => {
+                    console.log("daytime:",item.time)
+                    console.log("dayvalue:",item.value)
                     const time = item.time; // 直接访问 item 对象的 time 属性
                     const value = item.value; // 直接访问 item 对象的 value 属性
                     this.bloodSugar.push({ time: time, value: value });
-                    }
-                );
-                //const val=item[time];
-                console.log("Response****"+this.bloodSugar[0].time);
+                });
                 // 获取数据完毕，接下来进行绘图
                 this.drawChart();
             }).catch(error => {
-                console.error('获取本日血糖数据时出错：' + error);
+                console.error('获取日血糖数据时出错：' + error);
                 if (error.network) return
                 error.defaultHandler();
             })
@@ -401,7 +398,50 @@ export default {
             };
             return option;
         },
-
+        disabledDate(date){
+            // 设置不可选的日期
+            console.log("disabled")
+            switch(this.category){
+                case 0:{
+                    // 选择日
+                    // 获取当前日期
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); // 重置时间为00:00:00，确保是当天的开始
+                    // 获取当前日期减去15天的日期
+                    const fifteenDaysAgo = new Date(today);
+                    fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+                    // 禁用当前时间之后的日期和十五天前的日期
+                    return date.getTime() > today.getTime() || date.getTime() <= fifteenDaysAgo.getTime();
+                    break;
+                }
+                case 1:{
+                    // 选择周
+                    // 获取当前日期
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); // 设置时间为当天的开始
+                    // 获取当前日期前30天的日期
+                    const thirtyDaysAgo = new Date(today);
+                    thirtyDaysAgo.setDate(today.getDate() - 30);
+                    // 禁用逻辑：如果日期晚于当前日期或早于当前日期前30天
+                    return date.getTime() > today.getTime() || date.getTime() < thirtyDaysAgo.getTime();
+                    break;
+                }
+                case 2:{
+                    // 选择月
+                    // 获取当前日期
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); // 设置时间为当天的开始
+                    // 获取当前日期前一年的日期
+                    const oneYearAgo = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+                    // 禁用逻辑：如果日期晚于当前日期或早于当前日期前一年
+                    return date.getTime() > today.getTime() || date.getTime() < oneYearAgo.getTime();
+                    break;
+                }
+                default:{
+                    console.log("出现了一些错误，请重新尝试！")
+                }
+            }
+        }
     },
 }
 </script>
@@ -413,6 +453,10 @@ export default {
     margin-left: 5%;
     padding-top: 20px;
     margin-bottom: 20px;
+}
+.statistic{
+    margin-left: 120px;
+    margin-top: 30px;
 }
 .viewTitle {
     background-image: linear-gradient(96.14deg,
