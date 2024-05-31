@@ -48,8 +48,8 @@
 
                 </el-dialog>
 
-                <div>
-                    <div id="main" style="width: 600px; height: 400px"></div>
+                <div class="BDGraphic">
+                    <div id="main" style="width: 100%; height: 500px"></div>
                 </div>
             </el-card>
         </div>
@@ -86,42 +86,11 @@ export default {
         }
     },
     mounted(){
-        this.option = this.setOptions();
-        //this.$nextTick(() => {
-          //  this.$refs.chart.init();
-        //});
-        //this.getTodayBloodSugarData();  // 默认显示当天的血糖曲线
-        this.drawChart()
+        this.getTodayBloodSugarData()
+        //this.drawChart()
     },
     methods:{
-        drawChart() {
-            console.log("echarts")
-            // 基于准备好的dom，初始化echarts实例  这个和上面的main对应
-            let myChart = echarts.init(document.getElementById("main"));
-            // 指定图表的配置项和数据
-            let option = {
-                title: {
-                    text: "ECharts 入门示例",
-                },
-                tooltip: {},
-                legend: {
-                    data: ["销量"],
-                },
-                xAxis: {
-                    data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
-                },
-                yAxis: {},
-                series: [
-                    {
-                        name: "销量",
-                        type: "bar",
-                        data: [5, 20, 36, 10, 10, 20],
-                    },
-                ],
-            };
-            // 使用刚指定的配置项和数据显示图表。
-            myChart.setOption(option);
-        },
+
         selectDate(){
             this.dialogVisible=true;
         },
@@ -137,17 +106,19 @@ export default {
                         }
                     }).then(response => {
                         let responseObj = response.json
-                        this.highStatistic = response.response.highSta.toFixed(2);
-                        this.normalStatistic = response.response.normalSta.toFixed(2);
-                        this.lowStatistic =response.response.lowSta.toFixed(2);
+                        this.highStatistic = responseObj.response.highSta.toFixed(2);
+                        this.normalStatistic = responseObj.response.normalSta.toFixed(2);
+                        this.lowStatistic =responseObj.response.lowSta.toFixed(2);
                         this.dayBloodSugar =[];
-                        response.response.entry.forEach(item => {
-                            const time = Object.keys(item)[0];
-                            const value = item [time];
+                        responseObj.response.entry.forEach(item => {
+                            console.log("daytime:",item.time)
+                            console.log("dayvalue:",item.value)
+                            const time = item.time; // 直接访问 item 对象的 time 属性
+                            const value = item.value; // 直接访问 item 对象的 value 属性
                             this.dayBloodSugar.push({ time: time, value: value });
                         });
                         // 获取数据完毕，接下来进行绘图
-                        this.printLineChart();
+                        this.drawChart();
                     }).catch(error => {
                         console.error('获取日血糖数据时出错：' + error);
                         if (error.network) return
@@ -164,11 +135,11 @@ export default {
                         }
                     }).then(response => {
                         let responseObj = response.json
-                        this.highStatistic =response.response.hyperglycemiaPercentage.toFixed(2);
-                        this.lowStatistic = response.response.hypoglycemiaPercentage.toFixed(2);
-                        this.normalStatistic = response.response.euGlycemiaPercentage.toFixed(2);
+                        this.highStatistic =responseObj.response.hyperglycemiaPercentage.toFixed(2);
+                        this.lowStatistic = responseObj.response.hypoglycemiaPercentage.toFixed(2);
+                        this.normalStatistic = responseObj.response.euGlycemiaPercentage.toFixed(2);
                         this.weeklyBloodSugar=[];
-                        response.response.data.forEach(item=>{
+                        responseObj.response.data.forEach(item=>{
                                 const time=Object.keys(item)[0];
                                 const value=item[time];
 
@@ -182,7 +153,7 @@ export default {
                             }
                         );
                         // 获取数据完毕，接下来进行绘图
-                        this.printLineChart();
+                        this.drawChart();
                     }).catch(error => {
                         console.error('获取周血糖数据时出错：' + error);
                         if (error.network) return
@@ -199,11 +170,11 @@ export default {
                         }
                     }).then(response =>{
                         let responseObj = response.json
-                        this.highStatistic =response.response.hyperglycemiaPercentage.toFixed(2);
-                        this.normalStatistic = response.response.euGlycemiaPercentage.toFixed(2);
-                        this.lowStatistic = response.response.hypoglycemiaPercentage.toFixed(2);
+                        this.highStatistic =responseObj.response.hyperglycemiaPercentage.toFixed(2);
+                        this.normalStatistic = responseObj.response.euGlycemiaPercentage.toFixed(2);
+                        this.lowStatistic = responseObj.response.hypoglycemiaPercentage.toFixed(2);
                         this.monthBloodSugar = [];
-                        response.response.data.forEach(item=>{
+                        responseObj.response.data.forEach(item=>{
                                 const time=Object.keys(item)[0];
                                 const value=item[time];
 
@@ -220,7 +191,7 @@ export default {
                             console.log(Object.keys(item)[0]);
                         })
                         // 获取数据完毕，接下来进行绘图
-                        this.printLineChart();
+                        this.drawChart();
                     }).catch(error => {
                         console.error('获取月血糖数据时出错：' + error);
                         if (error.network) return
@@ -233,16 +204,86 @@ export default {
                 }
             }
         },
+        getTodayBloodSugarData(){
+            // 获取血糖数据
+            axios.get("/api/glycemia/chart",{
+                params:{
+                    type:'realtime',
+                    date:this.startDate
+                }
+            }).then(response =>{
+                let responseObj = response.json
+                console.log("BBB response:",responseObj)
+                console.log("BBB response.response:",responseObj.response)
+                this.dayBloodSugar.value =responseObj.response;
+
+                responseObj.response.entry.forEach((item)=>{
+                    console.log(item.time)
+                    console.log(item.value)
+                    const time = item.time; // 直接访问 item 对象的 time 属性
+                    const value = item.value; // 直接访问 item 对象的 value 属性
+                    this.dayBloodSugar.push({ time: time, value: value });
+                    }
+                );
+                //const val=item[time];
+                console.log("Response****"+this.dayBloodSugar[0].time);
+                // 获取数据完毕，接下来进行绘图
+                this.drawChart();
+            }).catch(error => {
+                console.error('获取本日血糖数据时出错：' + error);
+                if (error.network) return
+                error.defaultHandler();
+            })
+        },
+        getCurrentDate(){
+            // 获取当前日期并格式化为 YYYY-MM-DD
+            const currentDate = new Date();
+            const year = currentDate.getFullYear();
+            const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+            const day = currentDate.getDate().toString().padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        },
+        drawChart() {
+            console.log("echarts")
+
+            // 基于准备好的dom，初始化echarts实例  这个和上面的main对应
+            let myChart = echarts.init(document.getElementById("main"));
+            // 指定图表的配置项和数据
+            let option =this.setOptions()
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        },
         setOptions(){
             // 配置echarts折线图
-            let base = +new Date(1968, 9, 3);
-            let oneDay = 24 * 3600 * 1000;
-            let date = [];
-            let data = [Math.random() * 300];
-            for (let i = 1; i < 20000; i++) {
-                var now = new Date((base += oneDay));
-                date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'));
-                data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]));
+            let timeArray =[]   // 存储横坐标：时间
+            let valueArray=[]   // 存储纵坐标：血糖值；在周/月情况下，存储最高血糖值
+            let minValue = []   // 存储周/月情况下最低血糖值
+
+            switch(this.category){
+                case 0:{
+                    // 日记录
+                    console.log("Graphic:dayBloodSugar")
+                    timeArray = this.dayBloodSugar.map(entry => {
+                        let date = new Date(entry.time); // 解析时间字符串
+                        return date.toLocaleTimeString('en-CA', { hour12: false, hour: '2-digit', minute: '2-digit' });
+                    });
+                    console.log("timeArray:",timeArray)
+                    valueArray = this.dayBloodSugar.map(entry => entry.value)
+                    console.log("valueArray",valueArray)
+                    break;
+                }
+                case 1:{
+                    // 周记录
+                    break;
+                }
+                case 2:{
+                    // 月记录
+                    break;
+                }
+                default:{
+                    alert("加载图表出错，请重新尝试！")
+                    break;
+                }
             }
             let option = {
                 tooltip: {
@@ -253,7 +294,7 @@ export default {
                 },
                 title: {
                     left: 'center',
-                    text: 'Large Area Chart'
+                    text: 'Blood Sugar Graphic'
                 },
                 toolbox: {
                     feature: {
@@ -267,11 +308,11 @@ export default {
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: date
+                    data: timeArray
                 },
                 yAxis: {
                     type: 'value',
-                    boundaryGap: [0, '100%']
+                    boundaryGap: [0, '100%'],
                 },
                 dataZoom: [
                     {
@@ -286,7 +327,7 @@ export default {
                 ],
                 series: [
                     {
-                        name: 'Fake Data',
+                        name: 'Blood sugar',
                         type: 'line',
                         symbol: 'none',
                         sampling: 'lttb',
@@ -305,73 +346,13 @@ export default {
                                 }
                             ])
                         },
-                        data: data
+                        data: valueArray
                     }
                 ]
             };
             return option;
         },
-        getTodayBloodSugarData(){
-            // 获取血糖数据
-            axios.get("/api/glycemia/chart",{
-                params:{
-                    type:'realtime',
-                    date:this.startDate
-                }
-            }).then(response =>{
-                let responseObj = response.json
-                this.dayBloodSugar.value =response.response;
-                response.response.forEach(item=>{
-                        const time=Object.keys(item)[0];
-                        const value=item[time];
-                        this.dayBloodSugar.push({ time: time, value: value });
-                    }
-                );
-                const val=item[time];
-                console.log("Response****"+this.dayBloodSugar);
-                // 获取数据完毕，接下来进行绘图
-                this.printLineChart();
-            }).catch(error => {
-                console.error('获取本日血糖数据时出错：' + error);
-                if (error.network) return
-                error.defaultHandler();
-            })
-        },
-        getCurrentDate(){
-            // 获取当前日期并格式化为 YYYY-MM-DD
-            const currentDate = new Date();
-            const year = currentDate.getFullYear();
-            const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-            const day = currentDate.getDate().toString().padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        },
-        printLineChart() {
-            // 基于准备好的dom，初始化echarts实例
-            var myChart = this.$echarts.init(document.getElementById('main'));
 
-            // 指定图表的配置项和数据
-            var option = {
-                title: {
-                    text: 'ECharts 入门示例'
-                },
-                tooltip: {},
-                legend: {
-                    data:['销量']
-                },
-                xAxis: {
-                    data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-                },
-                yAxis: {},
-                series: [{
-                    name: '销量',
-                    type: 'bar',
-                    data: [5, 20, 36, 10, 10, 20]
-                }]
-            };
-
-            // 使用刚指定的配置项和数据显示图表。
-            myChart.setOption(option);
-        }
     },
 }
 </script>
@@ -382,7 +363,7 @@ export default {
     color: #000000;
     margin-left: 5%;
     padding-top: 20px;
-    margin-bottom: 70px;
+    margin-bottom: 20px;
 }
 .viewTitle {
     background-image: linear-gradient(96.14deg,
@@ -431,7 +412,10 @@ export default {
     margin-right: 40px;
     margin-left: 10px;
 }
-
+.BDGraphic{
+    margin-top: 50px;
+    margin-left: 80px;
+}
 .result_title {
     margin-left: 7%;
     margin-top: 1%;
