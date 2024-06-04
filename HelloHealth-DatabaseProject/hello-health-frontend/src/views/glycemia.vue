@@ -13,6 +13,9 @@
             <el-card class="cardStyle">
                 <el-row class="BL_title">
                     <div class="viewTitle tracking-in-expand" style="padding-top: 3px">血糖数据图</div>
+                    <div style="color: #9eb4cb; " class="functionDesc">
+                        您可以在这里查看患者在特定时间段的的血糖数据。
+                    </div>
                 </el-row>
 
                 <div class="filter-drug-box">
@@ -55,7 +58,20 @@
             </el-card>
         </div>
         <!--展示信息的分栏，分栏3：运动情况-->
+        <div>
+            <el-card class="cardStyle" style="height: 600px">
+                <el-row class="BL_title">
+                    <div class="viewTitle tracking-in-expand" style="padding-top: 3px">运动周报图</div>
+                    <div style="color: #9eb4cb; " class="functionDesc">
+                        您可以在这里查看该患者在一周内每日的运动分钟数。
+                    </div>
+                </el-row>
 
+                <div class="BDGraphic">
+                    <div id="sports" style="width: 100%;height: 800px;"></div>
+                </div>
+            </el-card>
+        </div>
     </div>
 </template>
 
@@ -76,20 +92,19 @@ export default {
             dialogVisible: false,
             dialogMessage: '',
             startDate:this.getCurrentDate(),   // 默认为当天日期
-            option:null,
             highStatistic:ref([]),        // 存储高血糖概率值
             normalStatistic: ref([]),   //存储正常血糖概率值
             lowStatistic: ref([]),    //存储低血糖概率值
             bloodSugar:[],
             seriesName:"Blood Sugar",
+            sportsData:[],
         }
     },
     mounted(){
         this.getTodayBloodSugarData()
-        //this.drawChart()
+        this.getSportsData()
     },
     methods:{
-
         selectDate(){
             this.dialogVisible=true;
         },
@@ -117,7 +132,7 @@ export default {
                             this.bloodSugar.push({ time: time, value: value });
                         });
                         // 获取数据完毕，接下来进行绘图
-                        this.drawChart();
+                        this.drawBDChart();
                     }).catch(error => {
                         console.error('获取日血糖数据时出错：' + error);
                         if (error.network) return
@@ -152,7 +167,7 @@ export default {
                             }
                         );
                         // 获取数据完毕，接下来进行绘图
-                        this.drawChart();
+                        this.drawBDChart();
                     }).catch(error => {
                         console.error('获取周血糖数据时出错：' + error);
                         if (error.network) return
@@ -184,7 +199,7 @@ export default {
                             }
                         );
                         // 获取数据完毕，接下来进行绘图
-                        this.drawChart();
+                        this.drawBDChart();
                     }).catch(error => {
                         console.error('获取月血糖数据时出错：' + error);
                         if (error.network) return
@@ -217,7 +232,7 @@ export default {
                     this.bloodSugar.push({ time: time, value: value });
                 });
                 // 获取数据完毕，接下来进行绘图
-                this.drawChart();
+                this.drawBDChart();
             }).catch(error => {
                 console.error('获取日血糖数据时出错：' + error);
                 if (error.network) return
@@ -232,7 +247,7 @@ export default {
             const day = currentDate.getDate().toString().padStart(2, '0');
             return `${year}-${month}-${day}`;
         },
-        drawChart() {
+        drawBDChart() {
             console.log("echarts")
 
             // 基于准备好的dom，初始化echarts实例  这个和上面的main对应
@@ -441,6 +456,91 @@ export default {
                     console.log("出现了一些错误，请重新尝试！")
                 }
             }
+        },
+        getSportsData(){
+            // 获取运动数据
+            console.log("get sports data")
+            // 获取数据
+            axios.get("/api/sports/sportRecord").then(response => {
+                let responseObj = response.json
+                console.log("sports data111:",responseObj)
+                this.sportsData = responseObj.response.minute_record;
+                console.log("一周内运动的分钟数：",this.sportsData);
+                // 数据获取完毕，画图
+                this.drawSportsChart()
+            }).catch(error => {
+                console.error('获取运动数据时出错：' + error);
+                if (error.network) return
+                error.defaultHandler();
+            })
+        },
+        drawSportsChart(){
+            // 画运动周报图
+            console.log("print sports graphic")
+            // 获取一周内的日期
+            const startDate = new Date(); // 当前日期
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() - 6); // 一周前的日期
+            // 构建日期数组，只包含月和日
+            const dateArray = [];
+            while (endDate <= startDate) {
+                const month = (endDate.getMonth() + 1).toString().padStart(2, '0');
+                const day = endDate.getDate().toString().padStart(2, '0');
+                dateArray.push(`${month}-${day}`);
+                endDate.setDate(endDate.getDate() + 1); // 增加日期
+            }
+            console.log("运动横坐标：",dateArray);
+
+            let myChart = echarts.init(document.getElementById("sports"));
+            let option ={
+                // Make gradient line here
+                visualMap: [
+                    {
+                        show: false,
+                        type: 'continuous',
+                        seriesIndex: 0,
+                        min: 0,
+                        max: 400
+                    }
+                ],
+                title: [
+                    {
+                        left: 'center',
+                        text: '运动周报图'
+                    }
+                ],
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: [
+                    {
+                        data: dateArray
+                    }
+                ],
+                yAxis: [
+                    {},
+                ],
+                grid: [
+                    {
+                        bottom: '60%'
+                    }
+                ],
+                series: [
+                    {
+                        name:"运动分钟数",
+                        type: 'line',
+                        showSymbol: false,
+                        data: this.sportsData,
+                        lineStyle:{
+                            color: '#00ff00' // 改变线条颜色
+                        },
+                        itemStyle: {
+                            color: 'rgb(127,255,170)'
+                        },
+                    }
+                ]
+            }
+            myChart.setOption(option);
         }
     },
 }
@@ -453,6 +553,11 @@ export default {
     margin-left: 5%;
     padding-top: 20px;
     margin-bottom: 20px;
+}
+.functionDesc{
+    margin-top: 0px;
+    margin-left: 50%;
+    font-size: 20px;
 }
 .statistic{
     margin-left: 120px;
@@ -513,6 +618,7 @@ export default {
     margin-left: 7%;
     margin-top: 1%;
 }
+
 
 .result_box {
     width: 90%;

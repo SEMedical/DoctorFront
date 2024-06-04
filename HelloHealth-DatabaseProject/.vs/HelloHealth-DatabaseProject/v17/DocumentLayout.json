@@ -3,6 +3,26 @@
   "WorkspaceRootPath": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:hello-health-frontend\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\\u8F85\u52A9\u6587\u4EF6\\HelloHealthDatabase.mdj||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:\u8F85\u52A9\u6587\u4EF6\\HelloHealthDatabase.mdj||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\src\\pages\\HomePage.vue||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:hello-health-frontend\\src\\pages\\HomePage.vue||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\src\\views\\MainPageView.vue||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:hello-health-frontend\\src\\views\\MainPageView.vue||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\src\\views\\UserAgreementView.vue||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:hello-health-frontend\\src\\views\\UserAgreementView.vue||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\src\\App.vue||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:hello-health-frontend\\src\\App.vue||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -43,6 +63,71 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "index.html",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\index.html",
+              "RelativeDocumentMoniker": "hello-health-frontend\\index.html",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\index.html",
+              "RelativeToolTip": "hello-health-frontend\\index.html",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAWAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2024-06-04T10:55:11.711Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "HelloHealthDatabase.mdj",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\\u8F85\u52A9\u6587\u4EF6\\HelloHealthDatabase.mdj",
+              "RelativeDocumentMoniker": "\u8F85\u52A9\u6587\u4EF6\\HelloHealthDatabase.mdj",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\\u8F85\u52A9\u6587\u4EF6\\HelloHealthDatabase.mdj",
+              "RelativeToolTip": "\u8F85\u52A9\u6587\u4EF6\\HelloHealthDatabase.mdj",
+              "ViewState": "AQIAADAAAAAAAAAAAAAAABMAAAAZAAAA",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAXdSURBVEhLpVRpbFRVGD33vjdv1s5Mt2mnpUPZZLWlC3ENGCrGiBhJTHAtiaIJRDRqTBT1FwlGY4zLDwixqbhEicZaRASlFaxACV202AXKotBlhtIyZTr7vHv93jipNrKYeJI78\u002B67933nO98998N/xYurGZJdwJumZVjlLMy8vQ6klDzzeE0UORSEB7LYwR32R2yLBmqnzQun310XjLH/RLDlKcG0vFjRjRWx57nf\u002BdzokDZtpTqdZZb/H468C/hygcufm9bHGnnkg4IlkZ2zq58u0DT2Ws6izK6r45oKFk4ngh6wh2rgteck14KEkGZtbEStrVLzvH3RECtWrJndV8Y1CWoqgJ0HIV9/AmtpSjMYZWFSovx\u002Bq\u002B/xY4lROVdxGVuvijSBWePw5GqTo3F7FQJtyzFzjpe9sx4zacsmiqzSf5qAhqqn8PKjztI5Zc4c1lm\u002BCh/OvRW5ihm5qhl5NAypBtgz9wF2lxOeGcXGlIEp8PtDULhwrajmxdOtw5tKc\u002BIPUioyEVb4pxsqEQ8rgnSwqKJ/Ybaom3vE2CBX5Hie7iRqWiKNrYV2BMwU7qa5pL0sh9eumVUApi4E51XzZ9vLXVnaDWDcjeDvRRjqsoBcSQTIECAFgeo8T8zndAwRWTCE\u002BMn\u002ByMSvQkG7btK76yP\u002BQHssLJhsybtFZk/fBnvBbHCThW4HKTEGVUJKAUXlGGhjGD\u002BPRIwI1lcgOqGi1OlAVb5HpmgPJcwliTc\u002Bo\u002ByhKzw24LWd7p2bt1HRUpGhUX\u002BgaJ7bX43YuAkiJcGp3FwzykWFEQw28ml0FHo0jq5vvXByKyry80kUXSQhuaByh\u002BxmOeR1yO7ZOaJjoSf526ycnd\u002B0Ha1nXds5c9m5vcSDLdBTGygoEZgUWLMAJ52LndqCZgPCAST6jlGJKrDEUgiP1YwJu4YBbxbOTMvCSLYVcZOiG9K5EPXf/fDDC5Xl5ZcNR2Dbs\u002BQkE7S1K/ARTe\u002BnoVKJKXt6MpEaWwGkuwiRwBgOPztHOkpK2ekSBwYLHIhYSIcu6WwNqdCpVHs7Ozsf1HU9tmvXLpluKGeGgZJ8iAO/Yu8d5SihVwsoOH2ZtiQdBW0jd/ScqkGLuA3RFSXsgt2EuNDBkjplwgS1nRRVrKG5uXldIpEIt7e3y0gkYngDGBkHev8A3liH5NtfofXOxXSpNMssZJcCngUMeTfgYqwM332\u002BEQ3fH8LSuxewmbN8yHa7KSaTFJBRxoeamprWl5WVXdy9e7cMBoNG6L8IDIRjwI79HA\u002BvnhEJqr7QjIrFa\u002BgMhFSsPEGlavn6YQz\u002B7kNbx88sOBaSFUt9zGazwuPxiMLCQjYwMPCS2Ww\u002BWldXJ6LRaCbqv1oFVcRKV1\u002BzFYMrkHRdmRrHb0eWo7\u002BrirKlHZKh/dAQDu7ql6qJI5XSoaoqHA6H1\u002BVy0RGkqzqJK/QiMjKkzzhfkCnOnZqHH796KH3exo/xL\u002BOSfba1Ayc6AmmS9JKUPiFE\u002BvmfmELgb6tBa8sJLK\u002B2Fhnz8bFc3vxlLYkREtIgBtmQGVaUSpLj43fa2Kg/TPdMssrKyqLe3l7W0NBgfDqJqQoMebZsm1AdRToZ41jTvRgbKSSHUOJMJlWVtTAkaCBJBpOBcyGx57NuxhUGSt5LEex/BfobUwjohjGhm7JgSrlOHa9Mdh1ZZhSFcS76LebQmvebV648g50rXU59jcJlPzUk9lPjadlx4FzCZGbOVFI4qZVPOYQpBCmhcG6OuS8M\u002B2z7PnkyqGnRfefHWh5L4kz50VP7G\u002B\u002Ba90rcw5fF/5joa7Rlh8qFZfBRm1nuq3ujNXj\u002B5CWb2aq6dd1oHH9j0qYGbi99Fa3HuwudE8\u002BZ32vc/KbA\u002BFYGR5vTmp860FuP5r735FiyR6rU6x3cp0dSkZ64GtgzGGk7HA/kJP2XTnYP/aIEjp/9KRMx7cupuOfmZRgeHcEDCw5zd/ZFvLVntTh74XhmdSqcpnzMt6zmQxNWuBc2iwKPB/ubmzKrBoA/AVaDVqxS2FUcAAAAAElFTkSuQmCC",
+              "WhenOpened": "2024-06-04T10:54:59.718Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserAgreementView.vue",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\src\\views\\UserAgreementView.vue",
+              "RelativeDocumentMoniker": "hello-health-frontend\\src\\views\\UserAgreementView.vue",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\src\\views\\UserAgreementView.vue",
+              "RelativeToolTip": "hello-health-frontend\\src\\views\\UserAgreementView.vue",
+              "ViewState": "AQIAAAoAAAAAAAAAAIAzwBgAAAB4AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003491|",
+              "WhenOpened": "2024-06-04T10:54:09.72Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainPageView.vue",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\src\\views\\MainPageView.vue",
+              "RelativeDocumentMoniker": "hello-health-frontend\\src\\views\\MainPageView.vue",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\src\\views\\MainPageView.vue",
+              "RelativeToolTip": "hello-health-frontend\\src\\views\\MainPageView.vue",
+              "ViewState": "AQIAAKUAAAAAAAAAAIAzwLMAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003491|",
+              "WhenOpened": "2024-06-04T10:53:56.891Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "HomePage.vue",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\src\\pages\\HomePage.vue",
+              "RelativeDocumentMoniker": "hello-health-frontend\\src\\pages\\HomePage.vue",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\src\\pages\\HomePage.vue",
+              "RelativeToolTip": "hello-health-frontend\\src\\pages\\HomePage.vue",
+              "ViewState": "AQIAANUAAAAAAAAAAIAzwOMAAAA/AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003491|",
+              "WhenOpened": "2024-06-04T10:53:53.652Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "App.vue",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\src\\App.vue",
               "RelativeDocumentMoniker": "hello-health-frontend\\src\\App.vue",
@@ -55,7 +140,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "MedicineCollectionView.vue",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\src\\views\\MedicineCollectionView.vue",
               "RelativeDocumentMoniker": "hello-health-frontend\\src\\views\\MedicineCollectionView.vue",
@@ -68,7 +153,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 8,
               "Title": "MedicineInformationView.vue",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\src\\views\\MedicineInformationView.vue",
               "RelativeDocumentMoniker": "hello-health-frontend\\src\\views\\MedicineInformationView.vue",
@@ -81,7 +166,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 6,
               "Title": "PostFloor.vue",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\\u8F6F\u4EF6\u5DE5\u7A0B\u7BA1\u7406\u4E0E\u7ECF\u6D4E\\\u7CD6\u5C0F\u667A\u533B\u751F\u7AEF\\DoctorFront\\HelloHealth-DatabaseProject\\hello-health-frontend\\src\\components\\postView\\PostFloor.vue",
               "RelativeDocumentMoniker": "hello-health-frontend\\src\\components\\postView\\PostFloor.vue",
