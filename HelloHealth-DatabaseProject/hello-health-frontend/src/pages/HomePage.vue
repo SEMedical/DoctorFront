@@ -61,8 +61,8 @@ const fetchDoctorInfo = () => {
             if (!responseObj.response.login) return;
             globalData.login = true;
             globalData.locked = responseObj.locked;
-            globalData.userInfo = userInfo.data;
             userInfo.data = responseObj.response;
+            globalData.userInfo = userInfo.data;
         })
         .catch(error => {
             if (error.network) return;
@@ -72,23 +72,27 @@ const fetchDoctorInfo = () => {
 
 
 const fetchPatientList = () => {
-    axios.get('/api/interaction/getPatientList')
-        .then(response => {
-            patientList.value = response.data.response.patientList;
-        })
-        .catch(error => {
-            console.error('Error fetching patient list', error);
-        });
+    if (isLogin) {
+        axios.get('/api/interaction/getPatientList')
+            .then(response => {
+                patientList.value = response.data.response.patientList;
+            })
+            .catch(error => {
+                console.error('Error fetching patient list', error);
+            });
+    }
 };
 
 const fetchApplicationList = () => {
-    axios.get('/api/interaction/getApplicationList')
-        .then(response => {
-            applicationList.value = response.data.response.msglist;
-        })
-        .catch(error => {
-            console.error('Error fetching application list', error);
-        });
+    if (isLogin) {
+        axios.get('/api/interaction/getApplicationList')
+            .then(response => {
+                applicationList.value = response.data.response.msglist;
+            })
+            .catch(error => {
+                console.error('Error fetching application list', error);
+            });
+    }
 };
 
 const handleAccept = (row) => {
