@@ -2,7 +2,6 @@
 
 import { changeTheme } from "@/assets/changeTheme";
 import LinkButtonWithIcon from "@/components/LinkButtonWithIcon.vue";
-import NotificationPopup from "@/components/NotificationPopup.vue";
 import UserInfoCard from "@/components/UserInfoCard.vue";
 import globalData from "@/global/global";
 import router from "@/router";
@@ -15,28 +14,16 @@ function loginButtonClicked() {
     router.push("/login")
 }
 
-const menuItemClick = (ke) => {
-    router.push(ke.index)
-}
-
 const exitButtonClicked = async () => {
     await axios.get("/api/Login/Logout")
     window.location.href = "/";
 }
 
-const notificationBox = ref();
-const notificationButtonClicked = () => {
-    userInfo.data.unread_notification = false;
-}
-
-const updateNotifications = () => {
-    notificationBox.value.getNotification();
-}
-
-const helpVisible = ref(false);
-
 const avatarClicked = () => {
-    if (!isLogin.value) {
+    if (isLogin.value) {
+        router.push("/user")
+    }
+    else {
         router.push("/login")
     }
 }
@@ -57,40 +44,32 @@ let userInfo = reactive({
 
 let menuImgSrc = "/static/menu_main.png"; // 默认图片路径
 const isLogin = ref(false);
-const loadComplete = ref(true);
 const gotUserInfo = ref(false);
 const patientList = ref([]);
 const applicationList = ref([]);
 const menu = ref();
+const helpVisible = ref(false);
 
-axios.get("/api/interaction/DoctorInfo").then(response => {
-    console.log("HomePage")
-    let responseObj = response.json
-    console.log("responseObj:", responseObj)
-    console.log("login:", responseObj.response.login)
-    console.log("mes:", responseObj.message)
-    console.log("obj:", responseObj.response)
-    isLogin.value = responseObj.login;
+const fetchDoctorInfo = () => {
+    axios.get("/api/interaction/DoctorInfo")
+        .then(response => {
+            let responseObj = response.data;
+            console.log("responseObj:", responseObj);
+            console.log("login:", responseObj.response.login);
+            isLogin.value = responseObj.response.login;
+            gotUserInfo.value = true;
+            if (!responseObj.response.login) return;
+            globalData.login = true;
+            globalData.locked = responseObj.locked;
+            globalData.userInfo = userInfo.data;
+            userInfo.data = responseObj.response;
+        })
+        .catch(error => {
+            if (error.network) return;
+            error.defaultHandler();
+        });
+};
 
-    gotUserInfo.value = true
-    if (!responseObj.response.login) return;
-    globalData.login = true;
-    globalData.locked = responseObj.locked
-    userInfo.data = responseObj.response
-    globalData.userInfo = userInfo.data
-}).catch(error => {
-    if (error.network) return
-    error.defaultHandler();
-})
-
-const getSidebarPath = () => {
-    let path = router.currentRoute.value.path.split("/")
-    if (path.length === 1) {
-        return ""
-    } else {
-        return "/" + path[1];
-    }
-}
 
 const fetchPatientList = () => {
     axios.get('/api/interaction/getPatientList')
@@ -123,6 +102,7 @@ const handleAccept = (row) => {
 };
 
 onMounted(() => {
+    fetchDoctorInfo();
     fetchPatientList();
     fetchApplicationList();
 })
@@ -137,30 +117,16 @@ onMounted(() => {
                 <img alt="" src="/static/logo.png">
                 <!--                <SearchBox @searchStart="searchStart"></SearchBox>-->
             </div>
-            <div class="rightTitle" v-if="isLogin">
-                <img alt="" src="/static/titleImg1.png">
-                <el-popover :width="360"
-                    popper-style="box-shadow: 0 5px 20px hsla(0,0%,7%,.1);padding: 0; transition: opacity 0.3s;"
-                    trigger="click" @before-enter="updateNotifications">
-                    <template #reference>
-                        <LinkButtonWithIcon font-color="#fff" text="消息通知" icon="fi-rr-bell"
-                            :has-notification="userInfo.data.unread_notification" @click="notificationButtonClicked">
-                        </LinkButtonWithIcon>
-                    </template>
-                    <template #default>
-                        <NotificationPopup ref="notificationBox"></NotificationPopup>
-                    </template>
-                </el-popover>
-                <div class="line">
-                </div>
-                <LinkButtonWithIcon font-color="#fff" text="帮助" icon="" @click="helpButtonClicked"></LinkButtonWithIcon>
-                <LinkButtonWithIcon font-color="#fff" text="退出" icon="" @click="exitButtonClicked"></LinkButtonWithIcon>
-            </div>
             <div class="rightTitle" v-if="!isLogin">
+                <img alt="" src="/static/titleImg1.png">
+                <LinkButtonWithIcon font-color="#fff" text="登录/注册" icon="" @click="loginButtonClicked">
+                </LinkButtonWithIcon>
+            </div>
+            <div class="rightTitle" v-if="isLogin">
                 <img alt="" src="/static/titleImg1.png">
                 <LinkButtonWithIcon font-color="#fff" text="查看好友申请列表" icon="" @click="helpVisible = true">
                 </LinkButtonWithIcon>
-                <LinkButtonWithIcon font-color="#fff" text="登录/注册" icon="" @click="loginButtonClicked">
+                <LinkButtonWithIcon font-color="#fff" text="退出" icon="" @click="exitButtonClicked">
                 </LinkButtonWithIcon>
             </div>
 
@@ -176,7 +142,7 @@ onMounted(() => {
                     <el-table-column fixed="right" label="操作" width="200">
                         <template #default="{ row }">
                             <el-button link type="primary" size="small" @click="handleAccept(row)">同意</el-button>
-                            <el-button link type="danger" size="small" @click="handleReject(row)">拒绝</el-button>
+                            <!-- <el-button link type="danger" size="small" @click="handleReject(row)">拒绝</el-button> -->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -197,9 +163,8 @@ onMounted(() => {
                     <UserInfoCard :user-info="userInfo.data" showAvatarBorder @click="avatarClicked"></UserInfoCard>
                 </div>
 
-                <el-menu v-if="loadComplete" :default-active="getSidebarPath()" class="sideBarMenu" ref="menu">
-                    <component v-for="patient in patientList" :is="ElMenuItem" :index="patient.patientId"
-                        @click="menuItemClick(patient)">
+                <el-menu v-if="isLogin" class="sideBarMenu" ref="menu">
+                    <component v-for="patient in patientList" :is="ElMenuItem" :index="patient.patientId">
                         <template #title>
                             <img :src="patient.patientAvatar" alt="Patient Avatar">
                             <span>{{ patient.patientName }}</span>

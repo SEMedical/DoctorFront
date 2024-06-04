@@ -6,23 +6,23 @@ const router = createRouter({
         {
             path: '/login',
             name: 'login',
-            component: ()=>import("@/pages/LoginPage.vue"),
-            children:[
+            component: () => import("@/pages/LoginPage.vue"),
+            children: [
                 {
                     path: "",
                     name: "loginView",
-                    component: ()=>import("@/views/LoginView.vue"),
+                    component: () => import("@/views/LoginView.vue"),
                 }, {
                     path: "register",
                     name: "registerView",
-                    component: ()=>import("@/views/RegisterView.vue"),
+                    component: () => import("@/views/RegisterView.vue"),
                 }
                 , {
                     path: "forgot",
                     name: "forgotView",
-                    component: ()=>import("@/views/ForgotView.vue"),
+                    component: () => import("@/views/ForgotView.vue"),
                 }
-                ,{
+                , {
                     path: "666",
                     name: "666",
                     component: () => import("@/views/glycemia.vue")
@@ -32,19 +32,19 @@ const router = createRouter({
         {
             path: '/',
             name: 'home',
-            component: ()=>import("@/pages/HomePage.vue"),
-            children:[{
+            component: () => import("@/pages/HomePage.vue"),
+            children: [{
                 path: "",
                 name: "homeView",
-                component: ()=>import("@/views/MainPageView.vue"),
+                component: () => import("@/views/MainPageView.vue"),
             }, {
                 path: "news",
                 name: "newsView",
-                component: ()=>import("@/views/HealthFlashView.vue"),
+                component: () => import("@/views/HealthFlashView.vue"),
             }, {
                 path: "news/:flash_id",
                 name: "detailedNews",
-                component: ()=>import("@/views/DetailedNewsView.vue"),
+                component: () => import("@/views/DetailedNewsView.vue"),
             }, {
                 path: "medicine",
                 name: "medicineView",
@@ -52,55 +52,55 @@ const router = createRouter({
             }, {
                 path: 'medicineCard',
                 name: 'medicineCardView',
-                component: ()=>import("@/views/MedicineInformationView.vue"),
-            },{
+                component: () => import("@/views/MedicineInformationView.vue"),
+            }, {
                 path: "forum",
                 name: "forumView",
-                component: () => import ("@/views/PostBoardView.vue")
+                component: () => import("@/views/PostBoardView.vue")
             }, {
                 path: "forum/:postId",
                 name: "postView",
-                component: () => import ("@/views/PostView.vue")
-            },{
+                component: () => import("@/views/PostView.vue")
+            }, {
                 path: "calendar",
                 name: "calendarView",
-                component: () => import ("@/views/CalendarView.vue")
+                component: () => import("@/views/CalendarView.vue")
             }, {
                 path: 'medicineCollection',
                 name: 'medicineCollectionView',
-                component: ()=>import("@/views/MedicineCollectionView.vue"),
+                component: () => import("@/views/MedicineCollectionView.vue"),
             }, {
                 path: 'postCollection',
                 name: 'postCollectionView',
-                component: ()=>import("@/views/PostCollectionView.vue"),
-            },{
+                component: () => import("@/views/PostCollectionView.vue"),
+            }, {
                 path: "user",
                 name: "myView",
                 component: () => import("@/views/UserInfoView.vue")
-            },{
+            }, {
                 path: "user/:userId",
                 name: "otherView",
                 component: () => import("@/views/UserInfoView.vue")
-            },{
+            }, {
                 path: "coinDetail",
                 name: "coinView",
-                component: ()=>import("@/views/CoinView.vue"),
+                component: () => import("@/views/CoinView.vue"),
             },
             {
                 path: "UserAgreement",
                 name: "UserAgreement",
-                component: ()=>import("@/views/UserAgreementView.vue"),
-            },{
-                path:"Trajectory",
-                name:"Trajectory",
-                component:()=>import("@/views/TrajectoryView.vue")
-            },{
-                path:"BloodSugar",
-                name:"BloodSugar",
-                component:() => import("@/views/glycemia.vue")
+                component: () => import("@/views/UserAgreementView.vue"),
+            }, {
+                path: "Trajectory",
+                name: "Trajectory",
+                component: () => import("@/views/TrajectoryView.vue")
+            }, {
+                path: "BloodSugar",
+                name: "BloodSugar",
+                component: () => import("@/views/glycemia.vue")
             }]
         },
-        { path: '/:pathMatch(.*)*', name: 'NotFound', component: ()=>import("@/pages/ErrorPage.vue") },
+        { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import("@/pages/ErrorPage.vue") },
 
     ]
 })
