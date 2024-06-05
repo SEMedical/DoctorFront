@@ -28,6 +28,11 @@ const avatarClicked = () => {
     }
 }
 
+const patientClicked = (patient) => {
+    console.log("Clicked patient:", patient);
+    router.push(`/Patient/${patient.patientId}`);
+}
+
 let userInfo = reactive({
     data: {
         user_phone: "",
@@ -168,7 +173,8 @@ onMounted(() => {
                 </div>
 
                 <el-menu v-if="isLogin" class="sideBarMenu" ref="menu">
-                    <component v-for="patient in patientList" :is="ElMenuItem" :index="patient.patientId">
+                    <component v-for=" patient in patientList" :is="ElMenuItem" :index="patient.patientId"
+                        @click="patientClicked(patient)">
                         <template #title>
                             <img :src="patient.patientAvatar" alt="Patient Avatar">
                             <span>{{ patient.patientName }}</span>

@@ -4,15 +4,20 @@
         <div>
             <el-card class="cardStyle">
                 <el-descriptions class="margin-top" title="基本信息" :column="3" :size="size" border>
-
                 </el-descriptions>
+                <el-button plain @click="messageClicked(patientId)">
+                    发消息
+                </el-button>
             </el-card>
         </div>
         <!--展示信息的分栏，分栏2：血糖情况-->
         <div>
-            <el-card class="cardStyle">
+            <el-card class=" cardStyle">
                 <el-row class="BL_title">
                     <div class="viewTitle tracking-in-expand" style="padding-top: 3px">血糖数据图</div>
+                    <div style="color: #9eb4cb; " class="functionDesc">
+                        您可以在这里查看患者在特定时间段的的血糖数据。
+                    </div>
                 </el-row>
 
                 <div class="filter-drug-box">
@@ -34,15 +39,16 @@
                     <el-form-item label="开始日期" required>
                         <el-col>
                             <el-form-item prop="startDate" style="margin-bottom: 0">
-                                <el-date-picker type="date" format="YYYY/MM/DD" value-format="YYYY/MM/DD" placeholder="选择日期"
-                                                v-model="startDate" style="width: 100%">
+                                <el-date-picker type="date" format="YYYY/MM/DD" value-format="YYYY/MM/DD"
+                                    placeholder="选择日期" v-model="startDate" style="width: 100%"
+                                    :disabled-date="disabledDate">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
                     </el-form-item>
 
                     <el-form-item>
-                        <el-button @click="dialogVisible=false">取消</el-button>
+                        <el-button @click="dialogVisible = false">取消</el-button>
                         <el-button type="primary" @click="submitDate">提交</el-button>
                     </el-form-item>
 
@@ -50,75 +56,99 @@
 
                 <div class="BDGraphic">
                     <div id="main" style="width: 100%; height: 500px"></div>
+                    <div class="statistic">
+                        高血糖占比：{{ this.highStatistic }}%，正常血糖占比：{{ this.normalStatistic }}%，低血糖占比：{{
+                            this.lowStatistic
+                        }}%
+                    </div>
                 </div>
             </el-card>
         </div>
         <!--展示信息的分栏，分栏3：运动情况-->
+        <div>
+            <el-card class="cardStyle" style="height: 600px">
+                <el-row class="BL_title">
+                    <div class="viewTitle tracking-in-expand" style="padding-top: 3px">运动周报图</div>
+                    <div style="color: #9eb4cb; " class="functionDesc">
+                        您可以在这里查看该患者在一周内每日的运动分钟数。
+                    </div>
+                </el-row>
 
+                <div class="BDGraphic">
+                    <div id="sports" style="width: 100%;height: 800px;"></div>
+                </div>
+            </el-card>
+        </div>
     </div>
 </template>
 
 <script>
-import * as echarts from 'echarts';
-import ECharts from 'vue-echarts';
-import {ref} from "vue";
+import router from "@/router";
 import axios from "axios";
+import * as echarts from 'echarts';
+import { ref } from "vue";
+import ECharts from 'vue-echarts';
 
 export default {
     name: "glycemia.vue",
-    components:{
+    components: {
         ECharts
     },
-    data(){
-        return{
+    data() {
+        return {
+            patientId: null,
             category: 0,
             dialogVisible: false,
             dialogMessage: '',
-            startDate:this.getCurrentDate(),   // 默认为当天日期
-            option:null,
-            highStatistic:ref([]),        // 存储高血糖概率值
+            startDate: this.getCurrentDate(),   // 默认为当天日期
+            highStatistic: ref([]),        // 存储高血糖概率值
             normalStatistic: ref([]),   //存储正常血糖概率值
             lowStatistic: ref([]),    //存储低血糖概率值
-            //存储当周的血糖数据
-            weeklyBloodSugar:[],
-            dayBloodSugar:[],
-            monthBloodSugar:[],
+            bloodSugar: [],
+            seriesName: "Blood Sugar",
+            sportsData: [],
         }
     },
-    mounted(){
+    mounted() {
+        this.getParams()
         this.getTodayBloodSugarData()
-        //this.drawChart()
+        this.getSportsData()
     },
-    methods:{
-
-        selectDate(){
-            this.dialogVisible=true;
+    methods: {
+        getParams() {
+            this.patientId = this.$route.params.patientId;
         },
-        submitDate(){
-            this.dialogVisible=false;
+        messageClicked(patientId) {
+            router.push(`/Message/${patientId}`);
+        },
+        selectDate() {
+            this.dialogVisible = true;
+        },
+        submitDate() {
+            this.dialogVisible = false;
             console.log(this.startDate)
-            switch(this.category){
-                case 0:{
+            switch (this.category) {
+                case 0: {
                     // 代表选择了“日”
-                    axios.get("/api/glycemia/dailyHistory",{
-                        params:{
-                            date:this.startDate
+                    axios.get("/api/glycemia/dailyHistory", {
+                        params: {
+                            date: this.startDate
                         }
                     }).then(response => {
                         let responseObj = response.json
                         this.highStatistic = responseObj.response.highSta.toFixed(2);
                         this.normalStatistic = responseObj.response.normalSta.toFixed(2);
-                        this.lowStatistic =responseObj.response.lowSta.toFixed(2);
-                        this.dayBloodSugar =[];
+                        this.lowStatistic = responseObj.response.lowSta.toFixed(2);
+                        this.bloodSugar = [];
                         responseObj.response.entry.forEach(item => {
-                            console.log("daytime:",item.time)
-                            console.log("dayvalue:",item.value)
+                            console.log("daytime:", item.time)
+                            console.log("dayvalue:", item.value)
                             const time = item.time; // 直接访问 item 对象的 time 属性
                             const value = item.value; // 直接访问 item 对象的 value 属性
-                            this.dayBloodSugar.push({ time: time, value: value });
+                            this.bloodSugar.push({ time: time, value: value });
                         });
                         // 获取数据完毕，接下来进行绘图
-                        this.drawChart();
+                        this.drawBDChart();
                     }).catch(error => {
                         console.error('获取日血糖数据时出错：' + error);
                         if (error.network) return
@@ -126,34 +156,34 @@ export default {
                     })
                     break;
                 }
-                case 1:{
+                case 1: {
                     // 代表选择了“周”
-                    axios.get("/api/glycemia/weeklyOrMonthlyRecord",{
-                        params:{
-                            span:'week',
-                            startDate:this.startDate
+                    axios.get("/api/glycemia/weeklyOrMonthlyRecord", {
+                        params: {
+                            span: 'week',
+                            startDate: this.startDate
                         }
                     }).then(response => {
+                        console.log("week glycemia")
                         let responseObj = response.json
-                        this.highStatistic =responseObj.response.hyperglycemiaPercentage.toFixed(2);
-                        this.lowStatistic = responseObj.response.hypoglycemiaPercentage.toFixed(2);
-                        this.normalStatistic = responseObj.response.euGlycemiaPercentage.toFixed(2);
-                        this.weeklyBloodSugar=[];
-                        responseObj.response.data.forEach(item=>{
-                                const time=Object.keys(item)[0];
-                                const value=item[time];
-
-                                console.log("Time"+time);
-                                const entry = {
-                                    min_val: value.minValue,
-                                    max_val: value.maxValue,
-                                    time: value.time
-                                };
-                                this.weeklyBloodSugar.push(entry);
-                            }
+                        console.log("responseObj.response:", responseObj.response)
+                        console.log("responseObj.response.hyperPercentage:", responseObj.response.hyper_percent)
+                        this.highStatistic = responseObj.response.hyper_percent.toFixed(2);
+                        this.lowStatistic = responseObj.response.hypo_percent.toFixed(2);
+                        this.normalStatistic = responseObj.response.eu_percent.toFixed(2);
+                        this.bloodSugar = [];
+                        responseObj.response.entry.forEach(item => {
+                            console.log("weektime:", item.time)
+                            console.log("min value:", item.min_val)
+                            console.log("max value:", item.max_val)
+                            const time = item.time; // 直接访问 item 对象的 time 属性
+                            const min_val = item.min_val; // 直接访问 item 对象的 value 属性
+                            const max_val = item.max_val;
+                            this.bloodSugar.push({ time: time, min_val: min_val, max_val: max_val });
+                        }
                         );
                         // 获取数据完毕，接下来进行绘图
-                        this.drawChart();
+                        this.drawBDChart();
                     }).catch(error => {
                         console.error('获取周血糖数据时出错：' + error);
                         if (error.network) return
@@ -161,37 +191,31 @@ export default {
                     })
                     break;
                 }
-                case 2:{
+                case 2: {
                     // 代表选择了“月”
-                    axios.get("/api/glycemia/weeklyOrMonthlyRecord",{
-                        params:{
-                            span:'month',
-                            startDate:this.startDate
+                    axios.get("/api/glycemia/weeklyOrMonthlyRecord", {
+                        params: {
+                            span: 'month',
+                            startDate: this.startDate
                         }
-                    }).then(response =>{
+                    }).then(response => {
                         let responseObj = response.json
-                        this.highStatistic =responseObj.response.hyperglycemiaPercentage.toFixed(2);
-                        this.normalStatistic = responseObj.response.euGlycemiaPercentage.toFixed(2);
-                        this.lowStatistic = responseObj.response.hypoglycemiaPercentage.toFixed(2);
-                        this.monthBloodSugar = [];
-                        responseObj.response.data.forEach(item=>{
-                                const time=Object.keys(item)[0];
-                                const value=item[time];
-
-                                console.log("Time"+time);
-                                const entry = {
-                                    min_val: value.minValue,
-                                    max_val: value.maxValue,
-                                    time: value.time
-                                };
-                                this.monthBloodSugar.push(entry);
-                            }
+                        this.highStatistic = responseObj.response.hyper_percent.toFixed(2);
+                        this.lowStatistic = responseObj.response.hypo_percent.toFixed(2);
+                        this.normalStatistic = responseObj.response.eu_percent.toFixed(2);
+                        this.bloodSugar = [];
+                        responseObj.response.entry.forEach(item => {
+                            console.log("month time:", item.time)
+                            console.log("min value:", item.min_val)
+                            console.log("max value:", item.max_val)
+                            const time = item.time; // 直接访问 item 对象的 time 属性
+                            const min_val = item.min_val; // 直接访问 item 对象的 value 属性
+                            const max_val = item.max_val;
+                            this.bloodSugar.push({ time: time, min_val: min_val, max_val: max_val });
+                        }
                         );
-                        this.monthBloodSugar.forEach(item=>{
-                            console.log(Object.keys(item)[0]);
-                        })
                         // 获取数据完毕，接下来进行绘图
-                        this.drawChart();
+                        this.drawBDChart();
                     }).catch(error => {
                         console.error('获取月血糖数据时出错：' + error);
                         if (error.network) return
@@ -204,38 +228,34 @@ export default {
                 }
             }
         },
-        getTodayBloodSugarData(){
+        getTodayBloodSugarData() {
             // 获取血糖数据
-            axios.get("/api/glycemia/chart",{
-                params:{
-                    type:'realtime',
-                    date:this.startDate
+            axios.get("/api/glycemia/dailyHistory", {
+                params: {
+                    date: this.startDate
                 }
-            }).then(response =>{
+            }).then(response => {
                 let responseObj = response.json
-                console.log("BBB response:",responseObj)
-                console.log("BBB response.response:",responseObj.response)
-                this.dayBloodSugar.value =responseObj.response;
-
-                responseObj.response.entry.forEach((item)=>{
-                    console.log(item.time)
-                    console.log(item.value)
+                this.highStatistic = responseObj.response.highSta.toFixed(2);
+                this.normalStatistic = responseObj.response.normalSta.toFixed(2);
+                this.lowStatistic = responseObj.response.lowSta.toFixed(2);
+                this.bloodSugar = [];
+                responseObj.response.entry.forEach(item => {
+                    console.log("daytime:", item.time)
+                    console.log("dayvalue:", item.value)
                     const time = item.time; // 直接访问 item 对象的 time 属性
                     const value = item.value; // 直接访问 item 对象的 value 属性
-                    this.dayBloodSugar.push({ time: time, value: value });
-                    }
-                );
-                //const val=item[time];
-                console.log("Response****"+this.dayBloodSugar[0].time);
+                    this.bloodSugar.push({ time: time, value: value });
+                });
                 // 获取数据完毕，接下来进行绘图
-                this.drawChart();
+                this.drawBDChart();
             }).catch(error => {
-                console.error('获取本日血糖数据时出错：' + error);
+                console.error('获取日血糖数据时出错：' + error);
                 if (error.network) return
                 error.defaultHandler();
             })
         },
-        getCurrentDate(){
+        getCurrentDate() {
             // 获取当前日期并格式化为 YYYY-MM-DD
             const currentDate = new Date();
             const year = currentDate.getFullYear();
@@ -243,44 +263,79 @@ export default {
             const day = currentDate.getDate().toString().padStart(2, '0');
             return `${year}-${month}-${day}`;
         },
-        drawChart() {
+        drawBDChart() {
             console.log("echarts")
 
             // 基于准备好的dom，初始化echarts实例  这个和上面的main对应
             let myChart = echarts.init(document.getElementById("main"));
             // 指定图表的配置项和数据
-            let option =this.setOptions()
+            let option = this.setOptions()
             // 使用刚指定的配置项和数据显示图表。
             myChart.setOption(option);
         },
-        setOptions(){
+        setOptions() {
             // 配置echarts折线图
-            let timeArray =[]   // 存储横坐标：时间
-            let valueArray=[]   // 存储纵坐标：血糖值；在周/月情况下，存储最高血糖值
+            let timeArray = []   // 存储横坐标：时间
+            let valueArray = []   // 存储纵坐标：血糖值；在周/月情况下，存储最高血糖值
             let minValue = []   // 存储周/月情况下最低血糖值
 
-            switch(this.category){
-                case 0:{
+            switch (this.category) {
+                case 0: {
                     // 日记录
                     console.log("Graphic:dayBloodSugar")
-                    timeArray = this.dayBloodSugar.map(entry => {
+                    timeArray = this.bloodSugar.map(entry => {    // 只保留时和分
                         let date = new Date(entry.time); // 解析时间字符串
                         return date.toLocaleTimeString('en-CA', { hour12: false, hour: '2-digit', minute: '2-digit' });
                     });
-                    console.log("timeArray:",timeArray)
-                    valueArray = this.dayBloodSugar.map(entry => entry.value)
-                    console.log("valueArray",valueArray)
+                    console.log("timeArray:", timeArray)
+                    valueArray = this.bloodSugar.map(entry => entry.value)
+                    console.log("valueArray", valueArray)
+                    this.seriesName = "Blood Sugar"
                     break;
                 }
-                case 1:{
+                case 1: {
                     // 周记录
+                    console.log("Graphic:weekBloodSugar")
+                    // 使用 map 方法从 this.bloodSugar 数组中提取年月日
+                    timeArray = this.bloodSugar.map(entry => {
+                        // 解析时间字符串
+                        let date = new Date(entry.time);
+                        // 获取年月日，格式化为 'YYYY-MM-DD' 格式
+                        let year = date.getFullYear();
+                        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // getMonth() 返回的月份是从 0 开始的
+                        let day = date.getDate().toString().padStart(2, '0');
+                        return `${year}-${month}-${day}`;
+                    });
+                    console.log("timeArray:", timeArray)
+                    valueArray = this.bloodSugar.map(entry => entry.max_val)
+                    console.log("max valueArray", valueArray)
+                    minValue = this.bloodSugar.map(entry => entry.min_val)
+                    console.log("min valueArray", minValue)
+                    this.seriesName = "Maximum Blood Sugar"
                     break;
                 }
-                case 2:{
+                case 2: {
                     // 月记录
+                    console.log("Graphic:monthBloodSugar")
+                    // 使用 map 方法从 this.bloodSugar 数组中提取年月日
+                    timeArray = this.bloodSugar.map(entry => {
+                        // 解析时间字符串
+                        let date = new Date(entry.time);
+                        // 获取年月日，格式化为 'YYYY-MM-DD' 格式
+                        let year = date.getFullYear();
+                        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // getMonth() 返回的月份是从 0 开始的
+                        let day = date.getDate().toString().padStart(2, '0');
+                        return `${year}-${month}-${day}`;
+                    });
+                    console.log("timeArray:", timeArray)
+                    valueArray = this.bloodSugar.map(entry => entry.max_val)
+                    console.log("max valueArray", valueArray)
+                    minValue = this.bloodSugar.map(entry => entry.min_val)
+                    console.log("min valueArray", minValue)
+                    this.seriesName = "Maximum Blood Sugar"
                     break;
                 }
-                default:{
+                default: {
                     alert("加载图表出错，请重新尝试！")
                     break;
                 }
@@ -327,7 +382,7 @@ export default {
                 ],
                 series: [
                     {
-                        name: 'Blood sugar',
+                        name: this.seriesName,
                         type: 'line',
                         symbol: 'none',
                         sampling: 'lttb',
@@ -347,37 +402,201 @@ export default {
                             ])
                         },
                         data: valueArray
+                    },
+                    {
+                        name: 'Minimum Blood sugar',
+                        type: 'line',
+                        symbol: 'none',
+                        sampling: 'lttb',
+                        itemStyle: {
+                            color: 'rgb(127,255,170)'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: 'rgb(64,224,208)'
+                                },
+                                {
+                                    offset: 1,
+                                    color: 'rgb(127,255,170)'
+                                }
+                            ])
+                        },
+                        data: minValue
                     }
                 ]
             };
             return option;
         },
+        disabledDate(date) {
+            // 设置不可选的日期
+            console.log("disabled")
+            switch (this.category) {
+                case 0: {
+                    // 选择日
+                    // 获取当前日期
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); // 重置时间为00:00:00，确保是当天的开始
+                    // 获取当前日期减去15天的日期
+                    const fifteenDaysAgo = new Date(today);
+                    fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+                    // 禁用当前时间之后的日期和十五天前的日期
+                    return date.getTime() > today.getTime() || date.getTime() <= fifteenDaysAgo.getTime();
+                    break;
+                }
+                case 1: {
+                    // 选择周
+                    // 获取当前日期
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); // 设置时间为当天的开始
+                    // 获取当前日期前30天的日期
+                    const thirtyDaysAgo = new Date(today);
+                    thirtyDaysAgo.setDate(today.getDate() - 30);
+                    // 禁用逻辑：如果日期晚于当前日期或早于当前日期前30天
+                    return date.getTime() > today.getTime() || date.getTime() < thirtyDaysAgo.getTime();
+                    break;
+                }
+                case 2: {
+                    // 选择月
+                    // 获取当前日期
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); // 设置时间为当天的开始
+                    // 获取当前日期前一年的日期
+                    const oneYearAgo = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+                    // 禁用逻辑：如果日期晚于当前日期或早于当前日期前一年
+                    return date.getTime() > today.getTime() || date.getTime() < oneYearAgo.getTime();
+                    break;
+                }
+                default: {
+                    console.log("出现了一些错误，请重新尝试！")
+                }
+            }
+        },
+        getSportsData() {
+            // 获取运动数据
+            console.log("get sports data")
+            // 获取数据
+            axios.get("/api/sports/sportRecord").then(response => {
+                let responseObj = response.json
+                console.log("sports data111:", responseObj)
+                this.sportsData = responseObj.response.minute_record;
+                console.log("一周内运动的分钟数：", this.sportsData);
+                // 数据获取完毕，画图
+                this.drawSportsChart()
+            }).catch(error => {
+                console.error('获取运动数据时出错：' + error);
+                if (error.network) return
+                error.defaultHandler();
+            })
+        },
+        drawSportsChart() {
+            // 画运动周报图
+            console.log("print sports graphic")
+            // 获取一周内的日期
+            const startDate = new Date(); // 当前日期
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() - 6); // 一周前的日期
+            // 构建日期数组，只包含月和日
+            const dateArray = [];
+            while (endDate <= startDate) {
+                const month = (endDate.getMonth() + 1).toString().padStart(2, '0');
+                const day = endDate.getDate().toString().padStart(2, '0');
+                dateArray.push(`${month}-${day}`);
+                endDate.setDate(endDate.getDate() + 1); // 增加日期
+            }
+            console.log("运动横坐标：", dateArray);
 
+            let myChart = echarts.init(document.getElementById("sports"));
+            let option = {
+                // Make gradient line here
+                visualMap: [
+                    {
+                        show: false,
+                        type: 'continuous',
+                        seriesIndex: 0,
+                        min: 0,
+                        max: 400
+                    }
+                ],
+                title: [
+                    {
+                        left: 'center',
+                        text: '运动周报图'
+                    }
+                ],
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: [
+                    {
+                        data: dateArray
+                    }
+                ],
+                yAxis: [
+                    {},
+                ],
+                grid: [
+                    {
+                        bottom: '60%'
+                    }
+                ],
+                series: [
+                    {
+                        name: "运动分钟数",
+                        type: 'line',
+                        showSymbol: false,
+                        data: this.sportsData,
+                        lineStyle: {
+                            color: '#00ff00' // 改变线条颜色
+                        },
+                        itemStyle: {
+                            color: 'rgb(127,255,170)'
+                        },
+                    }
+                ]
+            }
+            myChart.setOption(option);
+        }
     },
 }
 </script>
 
 <style>
-.BL_title{
+.BL_title {
     font-size: 20px;
     color: #000000;
     margin-left: 5%;
     padding-top: 20px;
     margin-bottom: 20px;
 }
+
+.functionDesc {
+    margin-top: 0px;
+    margin-left: 50%;
+    font-size: 20px;
+}
+
+.statistic {
+    margin-left: 120px;
+    margin-top: 30px;
+}
+
 .viewTitle {
     background-image: linear-gradient(96.14deg,
-    rgba(0, 191, 168, 1) 0%,
-    #0093bf 100%);
+            rgba(0, 191, 168, 1) 0%,
+            #0093bf 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-align: left;
     font: 600 32px "Poppins", sans-serif;
 }
+
 .tracking-in-expand {
     -webkit-animation: tracking-in-expand 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
     animation: tracking-in-expand 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
 }
+
 .text {
     font-size: 16px;
     text-align: justify;
@@ -412,14 +631,17 @@ export default {
     margin-right: 40px;
     margin-left: 10px;
 }
-.BDGraphic{
+
+.BDGraphic {
     margin-top: 50px;
     margin-left: 80px;
 }
+
 .result_title {
     margin-left: 7%;
     margin-top: 1%;
 }
+
 
 .result_box {
     width: 90%;
@@ -440,6 +662,7 @@ export default {
     height: 0;
     width: 0;
 }
+
 /*边框样式设置*/
 .cardStyle {
     border-color: white;
@@ -633,8 +856,8 @@ export default {
 
 .sadTip {
     background-image: linear-gradient(96.14deg,
-    #8DBEF8 0%,
-    #377EB6 100%);
+            #8DBEF8 0%,
+            #377EB6 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 

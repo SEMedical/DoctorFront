@@ -95,9 +95,13 @@ const router = createRouter({
                 name: "Trajectory",
                 component: () => import("@/views/TrajectoryView.vue")
             }, {
-                path: "BloodSugar",
-                name: "BloodSugar",
+                path: "Patient/:patientId",
+                name: "PatientView",
                 component: () => import("@/views/glycemia.vue")
+            }, {
+                path: "Message/:patientId",
+                name: "MessageView",
+                component: () => import("@/views/MessageView.vue")
             }]
         },
         { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import("@/pages/ErrorPage.vue") },
