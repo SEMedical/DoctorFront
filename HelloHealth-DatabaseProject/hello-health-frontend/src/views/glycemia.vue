@@ -3,25 +3,97 @@
         <!--展示信息的分栏，分栏1：患者基本信息与发送消息按钮-->
         <div>
             <el-card class="cardStyle">
-                <el-descriptions class="margin-top" title="基本信息" :column="3" :size="size" border>
+                <el-row class="BL_title">
+                    <div class="viewTitle tracking-in-expand" style="padding-top: 3px">基本信息</div>
+                    <div style="color: #9eb4cb; " class="functionDesc">
+                        您可以在这里查看患者的基本信息和给该患者发信息。
+                    </div>
+                </el-row>
+                <el-descriptions class="margin-top" :column="2" :size="size" style="margin-top: 10px;width: 80%;margin-left: 50px" border>
                     <template>
                         <el-descriptions-item>
                             <template #label>
                                 <div class="cell-item">
-                                    患者姓名：
+                                    姓名：
                                 </div>
                             </template>
-                            <div class="input-container">
-                                <span>{{this.patientMsg.name}}</span>
-                                <div class="highlight"></div>
-                            </div>
+                            {{this.patientMsg.name}}
                         </el-descriptions-item>
                         <el-descriptions-item>
-
+                            <template #label>
+                                <div class="cell-item">
+                                    性别：
+                                </div>
+                            </template>
+                            {{this.patientMsg.gender}}
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                            <template #label>
+                                <div class="cell-item">
+                                    年龄：
+                                </div>
+                            </template>
+                            {{this.patientMsg.age}}
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                            <template #label>
+                                <div class="cell-item">
+                                    联系方式：
+                                </div>
+                            </template>
+                            {{this.patientMsg.phone_number}}
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                            <template #label>
+                                <div class="cell-item">
+                                    身高：
+                                </div>
+                            </template>
+                            {{this.patientMsg.height}}
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                            <template #label>
+                                <div class="cell-item">
+                                    体重：
+                                </div>
+                            </template>
+                            {{this.patientMsg.weight}}
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                            <template #label>
+                                <div class="cell-item">
+                                    糖尿病类型：
+                                </div>
+                            </template>
+                            {{this.patientMsg.diabetesType}}
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                            <template #label>
+                                <div class="cell-item">
+                                    确诊年份：
+                                </div>
+                            </template>
+                            {{this.patientMsg.diagnosisYear}}
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                            <template #label>
+                                <div class="cell-item">
+                                    并发症：
+                                </div>
+                            </template>
+                            {{this.patientMsg.complications}}
+                        </el-descriptions-item>
+                        <el-descriptions-item>
+                            <template #label>
+                                <div class="cell-item">
+                                    家族病史：
+                                </div>
+                            </template>
+                            {{this.patientMsg.familyHistory}}
                         </el-descriptions-item>
                     </template>
                 </el-descriptions>
-                <el-button plain @click="messageClicked(patientId)">
+                <el-button plain @click="messageClicked(this.patientId)" class="sendMessage">
                     发消息
                 </el-button>
             </el-card>
@@ -98,6 +170,7 @@ import * as echarts from 'echarts';
 import ECharts from 'vue-echarts';
 import {ref} from "vue";
 import axios from "axios";
+import router from "../router";
 
 export default {
     name: "glycemia.vue",
@@ -143,6 +216,7 @@ export default {
             console.log("访问的患者的ID为：",this.patientId)
         },
         messageClicked(patientId) {
+            console.log("发送信息患者ID：",this.patientId)
             router.push(`/Message/${patientId}`);
         },
         selectDate(){
@@ -602,14 +676,14 @@ export default {
                 this.patientMsg.name = responseObj.result.name
                 this.patientMsg.age = responseObj.result.age
                 this.patientMsg.gender = responseObj.result.gender
-                this.patientMsg.phone_number = responseObj.phone_number
+                this.patientMsg.phone_number = responseObj.result.phone_number
                 this.patientMsg.height =responseObj.result.height
                 this.patientMsg.weight = responseObj.result.weight
                 this.patientMsg.diabetesType = responseObj.result.diabetesType
                 this.patientMsg.diagnosisYear = responseObj.result.diagnosisYear
                 this.patientMsg.complications = responseObj.result.complications
                 this.patientMsg.familyHistory = responseObj.result.familyHistory
-                console.log(this.patientMsg.age, this.patientMsg.gender,this.patientMsg.name)
+                console.log(this.patientMsg.phone_number,this.patientMsg.age, this.patientMsg.gender,this.patientMsg.name)
             }).catch(error => {
                 console.error('获取患者基本信息时出错：' + error);
                 if (error.network) return
@@ -685,8 +759,12 @@ export default {
     margin-left: 10px;
 }
 .BDGraphic{
-    margin-top: 50px;
+    margin-top: 20px;
     margin-left: 80px;
+}
+.sendMessage{
+    margin-top: 10px;
+    margin-left: 90%;
 }
 .result_title {
     margin-left: 7%;

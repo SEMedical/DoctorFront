@@ -57,6 +57,7 @@ export default {
         };
     },
     mounted() {
+        console.log("进入发消息页面")
         this.getParams()
         this.fetchMessageData(this.doctorId, this.patientId);
     },
