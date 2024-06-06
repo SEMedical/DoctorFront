@@ -6,6 +6,9 @@
                 <el-descriptions class="margin-top" title="基本信息" :column="3" :size="size" border>
 
                 </el-descriptions>
+                <el-button plain @click="messageClicked(patientId)">
+                    发消息
+                </el-button>
             </el-card>
         </div>
         <!--展示信息的分栏，分栏2：血糖情况-->
@@ -98,13 +101,22 @@ export default {
             bloodSugar:[],
             seriesName:"Blood Sugar",
             sportsData:[],
+            patientId:null,
         }
     },
     mounted(){
         this.getTodayBloodSugarData()
         this.getSportsData()
+        this.getParams()
     },
     methods:{
+        getParams() {   // 从router里获取患者ID
+            this.patientId = this.$route.params.patientId;
+            console.log("访问的患者的ID为：",this.patientId)
+        },
+        messageClicked(patientId) {
+            router.push(`/Message/${patientId}`);
+        },
         selectDate(){
             this.dialogVisible=true;
         },
