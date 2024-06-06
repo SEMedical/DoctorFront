@@ -4,7 +4,22 @@
         <div>
             <el-card class="cardStyle">
                 <el-descriptions class="margin-top" title="基本信息" :column="3" :size="size" border>
+                    <template>
+                        <el-descriptions-item>
+                            <template #label>
+                                <div class="cell-item">
+                                    患者姓名：
+                                </div>
+                            </template>
+                            <div class="input-container">
+                                <span>{{this.patientMsg.name}}</span>
+                                <div class="highlight"></div>
+                            </div>
+                        </el-descriptions-item>
+                        <el-descriptions-item>
 
+                        </el-descriptions-item>
+                    </template>
                 </el-descriptions>
                 <el-button plain @click="messageClicked(patientId)">
                     发消息
@@ -102,12 +117,25 @@ export default {
             seriesName:"Blood Sugar",
             sportsData:[],
             patientId:null,
+            patientMsg:{
+                name:'',    // 患者姓名
+                gender:'',   // 患者性别
+                phone_number:'', // 患者联系方式
+                age:0,     // 患者年龄
+                height:'',   // 患者身高
+                weight:'',   // 患者体重
+                diabetesType:'',   // 患者糖尿病类型
+                diagnosisYear:0,   // 患者糖尿病确诊年份
+                complications:'',  // 患者所患糖尿病综合症
+                familyHistory:'' ,  // 患者家族患病史
+            }
         }
     },
     mounted(){
         this.getTodayBloodSugarData()
         this.getSportsData()
         this.getParams()
+        this.getPatientMsg()
     },
     methods:{
         getParams() {   // 从router里获取患者ID
@@ -128,7 +156,8 @@ export default {
                     // 代表选择了“日”
                     axios.get("/api/glycemia/dailyHistory",{
                         params:{
-                            date:this.startDate
+                            date:this.startDate,
+                            patient_id:this.patientId
                         }
                     }).then(response => {
                         let responseObj = response.json
@@ -157,7 +186,8 @@ export default {
                     axios.get("/api/glycemia/weeklyOrMonthlyRecord",{
                         params:{
                             span:'week',
-                            startDate:this.startDate
+                            startDate:this.startDate,
+                            patient_id:this.patientId
                         }
                     }).then(response => {
                         console.log("week glycemia")
@@ -192,7 +222,8 @@ export default {
                     axios.get("/api/glycemia/weeklyOrMonthlyRecord",{
                         params:{
                             span:'month',
-                            startDate:this.startDate
+                            startDate:this.startDate,
+                            patient_id:this.patientId
                         }
                     }).then(response =>{
                         let responseObj = response.json
@@ -228,7 +259,8 @@ export default {
             // 获取血糖数据
             axios.get("/api/glycemia/dailyHistory",{
                 params:{
-                    date:this.startDate
+                    date:this.startDate,
+                    payient_id:this.patientId
                 }
             }).then(response => {
                 let responseObj = response.json
@@ -473,7 +505,11 @@ export default {
             // 获取运动数据
             console.log("get sports data")
             // 获取数据
-            axios.get("/api/sports/sportRecord").then(response => {
+            axios.get("/api/sports/sportRecord",{
+                params:{
+                    patient_id:this.patientId
+                }
+            }).then(response => {
                 let responseObj = response.json
                 console.log("sports data111:",responseObj)
                 this.sportsData = responseObj.response.minute_record;
@@ -553,6 +589,32 @@ export default {
                 ]
             }
             myChart.setOption(option);
+        },
+        getPatientMsg(){
+            // 获取患者基本信息
+            axios.get("/api/health/health-record",{
+                params:{
+                    patient_id:this.patientId
+                }
+            }).then(response => {
+                let responseObj =response.json
+                console.log("患者基本信息responseObj为：",responseObj)
+                this.patientMsg.name = responseObj.result.name
+                this.patientMsg.age = responseObj.result.age
+                this.patientMsg.gender = responseObj.result.gender
+                this.patientMsg.phone_number = responseObj.phone_number
+                this.patientMsg.height =responseObj.result.height
+                this.patientMsg.weight = responseObj.result.weight
+                this.patientMsg.diabetesType = responseObj.result.diabetesType
+                this.patientMsg.diagnosisYear = responseObj.result.diagnosisYear
+                this.patientMsg.complications = responseObj.result.complications
+                this.patientMsg.familyHistory = responseObj.result.familyHistory
+                console.log(this.patientMsg.age, this.patientMsg.gender,this.patientMsg.name)
+            }).catch(error => {
+                console.error('获取患者基本信息时出错：' + error);
+                if (error.network) return
+                error.defaultHandler();
+            })
         }
     },
 }
@@ -686,6 +748,208 @@ export default {
     color: #ffffff;
 }
 
+/*最上方的大的用户名字样*/
+.userName {
+    font-size: 30px;
+    /*font-family: 宋体;*/
+    font-weight: bold;
+    color: black;
+    margin-top: 10px
+}
+
+/*杏仁币“更多详情”样式*/
+.coinButton {
+    margin-left: 2%;
+    font-size: 16px;
+    color: #409EFF;
+}
+
+.coin-left {
+    width: auto;
+}
+
+.coin-right {
+    margin-left: 2%;
+}
+
+/*”请登录“按钮样式*/
+.login-button {
+    background-color: white;
+    color: red;
+    border-color: white;
+    font-size: 30px;
+}
+
+/*”去认证“按钮样式*/
+.certificated-button {
+    background-color: white;
+    border-color: rgb(238, 137, 4);
+    color: #c45656;
+    margin-left: 10px;
+}
+
+/*弹出的医师认证框的按钮设置*/
+.dialog-footer {
+    text-align: right;
+}
+
+.dialog-footer button:first-child {
+    margin-right: 20px;
+}
+
+.wrapper {
+    position: relative;
+    width: 85%;
+    margin: 0 auto;
+}
+
+.input-container {
+    position: relative;
+}
+
+.input {
+    font-size: 1em;
+    width: 88%;
+    padding: 0.6em 1em;
+    border: none;
+    border-radius: 6px;
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    max-width: 600px;
+    color: #333;
+}
+
+.input:hover {
+    background-color: #f2f2f2;
+}
+
+.input:focus {
+    outline: none;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.input::placeholder {
+    color: #999;
+}
+
+.highlight {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #6cb16a;
+    transition: width 0.3s ease;
+}
+
+.input:focus+.highlight {
+    width: 75%;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+/*“我的关注”按钮的样式*/
+.attention-list {
+    margin-left: 80px;
+    border-color: white;
+    color: #00bfa8;
+}
+
+.user-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.user-card {
+    margin: 10px;
+}
+
+.user-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+/*用户状态封禁样式*/
+.state-locked {
+    color: red;
+    margin-left: 15px;
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: medium;
+}
+
+/*用户状态正常样式*/
+.state-normal {
+    color: #00bfa8;
+    margin-left: 30px;
+    font-weight: revert;
+    margin-top: 10px;
+    font-size: small;
+}
+
+.tips {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* 在主轴上居中对齐 */
+    text-align: center;
+    /* 也可以在文本上进行居中对齐 */
+    margin-top: 10px;
+}
+
+.sadTip {
+    background-image: linear-gradient(96.14deg,
+    #8DBEF8 0%,
+    #377EB6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    text-align: left;
+    font: 600 18px "Poppins", sans-serif;
+
+    margin-top: 5px;
+}
+
+.jello-horizontal {
+    animation: jello-horizontal 0.9s both;
+}
+
+@keyframes jello-horizontal {
+    0% {
+        transform: scale3d(1, 1, 1);
+    }
+
+    30% {
+        transform: scale3d(1.25, 0.75, 1);
+    }
+
+    40% {
+        transform: scale3d(0.75, 1.25, 1);
+    }
+
+    50% {
+        transform: scale3d(1.15, 0.85, 1);
+    }
+
+    65% {
+        transform: scale3d(0.95, 1.05, 1);
+    }
+
+    75% {
+        transform: scale3d(1.05, 0.95, 1);
+    }
+
+    100% {
+        transform: scale3d(1, 1, 1);
+    }
+}
 /*最上方的大的用户名字样*/
 .userName {
     font-size: 30px;
