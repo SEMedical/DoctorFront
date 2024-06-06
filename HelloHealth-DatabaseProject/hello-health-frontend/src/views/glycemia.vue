@@ -189,7 +189,7 @@ export default {
             bloodSugar:[],
             seriesName:"Blood Sugar",
             sportsData:[],
-            patientId:null,
+            patientId:ref([]),
             patientMsg:{
                 name:'',    // 患者姓名
                 gender:'',   // 患者性别
@@ -205,15 +205,21 @@ export default {
         }
     },
     mounted(){
-        this.getTodayBloodSugarData()
-        this.getSportsData()
         this.getParams()
-        this.getPatientMsg()
+    },
+    watch:{
+        '$route'(to, from) {
+             //这里to和from代表新旧路由对象
+            this.getParams();
+        }
     },
     methods:{
         getParams() {   // 从router里获取患者ID
             this.patientId = this.$route.params.patientId;
             console.log("访问的患者的ID为：",this.patientId)
+            this.getTodayBloodSugarData()
+            this.getSportsData()
+            this.getPatientMsg()
         },
         messageClicked(patientId) {
             console.log("发送信息患者ID：",this.patientId)
