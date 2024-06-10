@@ -1,5 +1,6 @@
 <script setup>
 
+import { confirmPatient, getApplicationList, getDoctorInfo, getPatientList, } from '@/api/doctor';
 import { changeTheme } from "@/assets/changeTheme";
 import LinkButtonWithIcon from "@/components/LinkButtonWithIcon.vue";
 import UserInfoCard from "@/components/UserInfoCard.vue";
@@ -55,59 +56,59 @@ const applicationList = ref([]);
 const menu = ref();
 const helpVisible = ref(false);
 
-const fetchDoctorInfo = () => {
-    axios.get("/api/interaction/DoctorInfo")
-        .then(response => {
-            let responseObj = response.data;
-            console.log("responseObj:", responseObj);
-            console.log("login:", responseObj.response.login);
-            isLogin.value = responseObj.response.login;
+const fetchDoctorInfo = async () => {
+    try {
+        const response = await getDoctorInfo();
+        if (response.response) {
+            isLogin.value = response.response.login;
             gotUserInfo.value = true;
-            if (!responseObj.response.login) return;
+            if (!response.response.login) return;
             globalData.login = true;
-            globalData.locked = responseObj.locked;
-            userInfo.data = responseObj.response;
+            globalData.locked = response.locked;
+            userInfo.data = response.response;
             globalData.userInfo = userInfo.data;
-        })
-        .catch(error => {
-            if (error.network) return;
-            error.defaultHandler();
-        });
-};
-
-
-const fetchPatientList = () => {
-    if (isLogin) {
-        axios.get('/api/interaction/getPatientList')
-            .then(response => {
-                patientList.value = response.data.response.patientList;
-            })
-            .catch(error => {
-                console.error('Error fetching patient list', error);
-            });
+        }
+    } catch (error) {
+        if (error.network) return;
+        error.defaultHandler();
     }
 };
 
-const fetchApplicationList = () => {
+const fetchPatientList = async () => {
     if (isLogin) {
-        axios.get('/api/interaction/getApplicationList')
-            .then(response => {
-                applicationList.value = response.data.response.msglist;
-            })
-            .catch(error => {
-                console.error('Error fetching application list', error);
-            });
+        try {
+            const response = await getPatientList();
+            if (response.response) {
+                patientList.value = response.response.patientList;
+            }
+        } catch (error) {
+            console.error('Error fetching patient list', error);
+        }
     }
 };
 
-const handleAccept = (row) => {
-    axios.post('/api/interaction/confirmPatient', { messageId: row.messageId })
-        .then(response => {
+const fetchApplicationList = async () => {
+    if (isLogin) {
+        try {
+            const response = await getApplicationList();
+            if (response.response) {
+                applicationList.value = response.response.msglist;
+            }
+        } catch (error) {
+            console.error('Error fetching application list', error);
+        }
+    }
+};
+
+const handleAccept = async (messageId) => {
+    try {
+        const response = await confirmPatient(messageId);
+        if (response) {
             console.log('同意操作成功');
-        })
-        .catch(error => {
-            console.error('同意操作出错', error);
-        });
+        }
+    } catch (error) {
+        console.error('同意操作出错', error);
+    }
 };
 
 onMounted(() => {
@@ -150,7 +151,8 @@ onMounted(() => {
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="200">
                         <template #default="{ row }">
-                            <el-button link type="primary" size="small" @click="handleAccept(row)">同意</el-button>
+                            <el-button link type="primary" size="small"
+                                @click="handleAccept(row.messageId, doctorId)">同意</el-button>
                             <!-- <el-button link type="danger" size="small" @click="handleReject(row)">拒绝</el-button> -->
                         </template>
                     </el-table-column>

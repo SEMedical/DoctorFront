@@ -32,23 +32,21 @@
                 </el-input>
             </div>
             <div class="sendButton">
-                <el-button @click="sendMessage">发送</el-button>
+                <el-button @click="send">发送</el-button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import globalData from "@/global/global";
+import { getMessage, sendMessage } from '@/api/doctor';
 import router from "@/router";
-import axios from "axios";
 import { ref } from "vue";
 
 export default {
     data() {
         return {
             patientId: null,
-            doctorId: globalData.userInfo.user_id,
             // 存储获取的消息数据
             MessageData: ref([]),
             patientName: '',
@@ -58,7 +56,7 @@ export default {
     },
     mounted() {
         this.getParams()
-        this.fetchMessageData(this.doctorId, this.patientId);
+        this.fetchMessageData(this.patientId);
     },
     methods: {
         getParams() {
@@ -67,36 +65,31 @@ export default {
         returnClicked(patientId) {
             router.push(`/Patient/${patientId}`);
         },
-        fetchMessageData(doctorId, patientId) {
-            axios.get('/api/interaction/GetMessage', {
-                params: {
-                    doctorId: doctorId,
-                    patientId: patientId
+        async fetchMessageData(patientId) {
+            try {
+                const response = await getMessage(patientId);
+                if (response.response) {
+                    this.MessageData = response.response.messageList;
+                    this.patientName = response.response.patientName;
+                    this.doctorAvatar = response.response.doctorAvatar;
                 }
-            })
-                .then(response => {
-                    this.MessageData = response.data.response.messageList;
-                    this.patientName = response.data.response.patientName;
-                    this.doctorAvatar = response.data.response.doctorAvatar;
-                })
-                .catch(error => {
-                    console.error('Error fetching MessageData', error);
-                });
+            }
+            catch (error) {
+                console.error('Error fetching MessageData', error);
+            }
         },
-        sendMessage() {
-            axios.post('/api/interaction/SendMessage', {
-                doctorId: this.doctorId,
-                patientId: this.patientId,
-                messageContent: this.textarea
-            })
-                .then(response => {
+        async send() {
+            try {
+                const response = await sendMessage(this.patientId, this.textarea);
+                if (response) {
                     console.log("消息发送成功！");
                     this.textarea = ''; // 清空对话框的内容
-                    this.fetchMessageData(this.doctorId, this.patientId); // 重新加载对话内容
-                })
-                .catch(error => {
-                    console.error("发送消息时出错：", error);
-                });
+                    this.fetchMessageData(this.patientId); // 重新加载对话内容
+                }
+            }
+            catch (error) {
+                console.error("发送消息时出错：", error);
+            }
         }
     }
 };
