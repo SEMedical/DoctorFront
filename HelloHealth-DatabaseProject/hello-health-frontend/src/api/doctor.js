@@ -6,8 +6,8 @@ export const getDoctorInfo = async () => {
             url: '/interaction/DoctorInfo',
             method: 'GET',
         });
-        console.log(response);
-        return response.response;
+        console.log("医生信息", response);
+        return response;
     } catch (error) {
         console.error('获取医生信息失败:', error);
         throw error;
@@ -20,8 +20,7 @@ export const getPatientList = async () => {
             url: '/interaction/getPatientList',
             method: 'GET',
         });
-        console.log(response);
-        return response.response;
+        return response;
     } catch (error) {
         console.error('获取患者列表失败:', error);
         throw error;
@@ -34,8 +33,8 @@ export const getApplicationList = async () => {
             url: '/interaction/getApplicationList',
             method: 'GET',
         });
-        console.log(response);
-        return response.response;
+        console.log("申请列表", response);
+        return response;
     } catch (error) {
         console.error('获取申请列表失败:', error);
         throw error;
@@ -62,7 +61,7 @@ export const getMessage = async (patientId) => {
             method: 'GET',
         });
         console.log(response);
-        return response.response;
+        return response;
     } catch (error) {
         console.error('获取消息失败:', error);
         throw error;

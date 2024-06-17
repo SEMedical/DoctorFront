@@ -49,7 +49,7 @@ let userInfo = reactive({
 });
 
 let menuImgSrc = "/static/menu_main.png"; // 默认图片路径
-const isLogin = ref(true);
+const isLogin = ref(false);
 const gotUserInfo = ref(false);
 const patientList = ref([]);
 const applicationList = ref([]);
@@ -60,7 +60,7 @@ const fetchDoctorInfo = async () => {
     try {
         const response = await getDoctorInfo();
         if (response.response) {
-            // isLogin.value = response.response.login;
+            isLogin.value = response.response.login;
             gotUserInfo.value = true;
             if (!response.response.login) return;
             globalData.login = true;
