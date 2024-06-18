@@ -234,7 +234,7 @@ export default {
             switch(this.category){
                 case 0:{
                     // 代表选择了“日”
-                    axios.get("/api/glycemia/dailyHistory",{
+                    axios.get("/api/glycemia/doctor/dailyHistory",{
                         params:{
                             date:this.startDate,
                             patient_id:this.patientId
@@ -263,7 +263,7 @@ export default {
                 }
                 case 1:{
                     // 代表选择了“周”
-                    axios.get("/api/glycemia/weeklyOrMonthlyRecord",{
+                    axios.get("/api/glycemia/doctor/weeklyOrMonthlyRecord",{
                         params:{
                             span:'week',
                             startDate:this.startDate,
@@ -299,7 +299,7 @@ export default {
                 }
                 case 2:{
                     // 代表选择了“月”
-                    axios.get("/api/glycemia/weeklyOrMonthlyRecord",{
+                    axios.get("/api/glycemia/doctor/weeklyOrMonthlyRecord",{
                         params:{
                             span:'month',
                             startDate:this.startDate,
@@ -337,7 +337,7 @@ export default {
         },
         getTodayBloodSugarData(){
             // 获取血糖数据
-            axios.get("/api/glycemia/dailyHistory",{
+            axios.get("/api/glycemia/doctor/dailyHistory",{
                 params:{
                     date:this.startDate,
                     payient_id:this.patientId
@@ -585,7 +585,7 @@ export default {
             // 获取运动数据
             console.log("get sports data")
             // 获取数据
-            axios.get("/api/sports/sportRecord",{
+            axios.get("/api/sports/doctor/sportRecord",{
                 params:{
                     patient_id:this.patientId
                 }
@@ -672,7 +672,7 @@ export default {
         },
         getPatientMsg(){
             // 获取患者基本信息
-            axios.get("/api/health/health-record",{
+            axios.get("/api/health/doctor/health-record",{
                 params:{
                     patient_id:this.patientId
                 }
