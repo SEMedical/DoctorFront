@@ -30,8 +30,6 @@
                             </template>
                             <!--从数据库获取用户名，用户名不可修改-->
                             <div class="input-container">
-                                <img :src="userInfo.avatar_url" alt="Patient Avatar"
-                                    style="width: 30px; height: 30px; border-radius: 50%;">
                                 <span>{{ userInfo.user_name }}</span>
                                 <div class="highlight"></div>
                             </div>

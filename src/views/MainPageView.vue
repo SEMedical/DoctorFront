@@ -15,7 +15,7 @@
                         </div>
                     </div>
 
-                    <button class="btn animate__animated animate__bounceIn" @click="go('login')">
+                    <!-- <button class="btn animate__animated animate__bounceIn" @click="go('login')">
                         <div>登录 / 注册</div>
                         <svg fill="none" viewBox="0 0 24 24" height="25px" width="25px" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"
@@ -25,17 +25,18 @@
                             <path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"
                                   stroke="white" d="M12 4C16.42 4 20 7 20 12C20 17 16.42 20 12 20"></path>
                         </svg>
-                    </button>
+                    </button> -->
                 </div>
 
-                <svg class="vector animate__animated animate__jackInTheBox" width="600" height="600" viewBox="0 0 600 600" fill="none"
-                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <svg class="vector animate__animated animate__jackInTheBox" width="600" height="600"
+                    viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
                     <path d="M600 0H0V600H600V0Z" fill="url(#pattern0)" />
                     <defs>
                         <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
                             <use xlink:href="#image0_208_60" transform="translate(0 -0.0168634) scale(0.00084317)" />
                         </pattern>
-                        <image xlink:href="/static/mainPage1.png" id="image0_208_60" width="1186" height="1226"/>
+                        <image xlink:href="/static/mainPage1.png" id="image0_208_60" width="1186" height="1226" />
                     </defs>
                 </svg>
             </div>
@@ -45,7 +46,7 @@
 
             <el-row style="display: flex; align-items: center;">
                 <el-col :span="18">
-                    <NewsCarousel/>
+                    <NewsCarousel />
                     <!--
                     <el-carousel >
                         <el-carousel-item v-for="item in 4" :key="item">
@@ -107,7 +108,7 @@
                             <div class="part-el-card-title">
                                 HH找药
                             </div>
-                            <div class="part-el-card-space cardDesc" >
+                            <div class="part-el-card-space cardDesc">
                                 <p>药品库的详细分类，结合智能推荐，为您快速定位查询所需药品。</p>
                                 <p>收藏您常用和感兴趣的药品，打造您的专属药品库。</p>
                             </div>
@@ -115,7 +116,9 @@
                             <div class="part-el-card-space" style="text-align: center;">
                                 <button class="detailButton" @click="go('medicine')">
                                     <i class="fi-rr-capsules"></i> &nbsp;&nbsp;点击进入
-                                    <div class="detailHoverEffect"><div></div></div>
+                                    <div class="detailHoverEffect">
+                                        <div></div>
+                                    </div>
                                 </button>
                             </div>
                         </div>
@@ -137,7 +140,9 @@
                             <div class="part-el-card-space" style="text-align: center;">
                                 <button class="detailButton" @click="go('calendar')">
                                     <i class="fi-rr-calendar-clock"></i> &nbsp;&nbsp;点击进入
-                                    <div class="detailHoverEffect"><div></div></div>
+                                    <div class="detailHoverEffect">
+                                        <div></div>
+                                    </div>
                                 </button>
                             </div>
                         </div>
@@ -159,7 +164,9 @@
                             <div class="part-el-card-space" style="text-align: center;">
                                 <button class="detailButton" @click="go('forum')">
                                     <i class="fi-rr-user-md-chat"></i> &nbsp;&nbsp;点击进入
-                                    <div class="detailHoverEffect"><div></div></div>
+                                    <div class="detailHoverEffect">
+                                        <div></div>
+                                    </div>
                                 </button>
                             </div>
                         </div>
@@ -170,7 +177,7 @@
 
         </div>
 
-        <div >
+        <div>
             <div style="background-color: #00bfa8;">
                 <el-row style="width: 95%; margin: 0 auto;">
                     <el-col :span="8">
@@ -193,7 +200,7 @@
                             <div class="footer-content">
                                 <el-row>
                                     <el-col :span="12" v-for="name in We" :key="name">
-                                        <div style="margin-top:10%"> {{name}} </div>
+                                        <div style="margin-top:10%"> {{ name }} </div>
                                     </el-col>
                                 </el-row>
                             </div>
@@ -208,12 +215,12 @@
                             <div class="footer-title">
                                 Contact Us
                             </div>
-                            <div class="footer-content address" >
+                            <div class="footer-content address">
                                 中国 上海曹安公路4800号同济大学软件学院
-                                <br/>
+                                <br />
                                 邮编：201804
-                                <br/>
-                                <img src="/static/tjlogo-white.png" class="school"/>
+                                <br />
+                                <img src="/static/tjlogo-white.png" class="school" />
 
                             </div>
                         </div>
@@ -227,15 +234,17 @@
                 </div>
 
                 <div>
-                    <br/>
+                    <br />
                 </div>
-                
+
                 <div class="beian">
-                <a target="_blank" href=" " style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
-                    <img src="/static/photo.jpg" style="float:left;"/>
-                    <p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">赣公网安备 36112802000130号</p >
-                
-                </a >
+                    <a target="_blank" href=" "
+                        style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
+                        <img src="/static/photo.jpg" style="float:left;" />
+                        <p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">赣公网安备
+                            36112802000130号</p>
+
+                    </a>
                 </div>
             </div>
         </div>
@@ -246,36 +255,32 @@
 <script>
 import globalData from "@/global/global";
 import router from "@/router";
-import {ElMessage} from "element-plus";
+import { ElMessage } from "element-plus";
 import NewsCarousel from "../components/NewsCarousel.vue";
 export default {
 
-    components: {NewsCarousel},
+    components: { NewsCarousel },
     props: {},
     data() {
 
         return {
-            We:['guangnianyuji','Huge_Black','bulu','Iuriak','a-little-dust','cicada1212','wukef2425','Karrr-Angel','mint3242','wyfjc'],
+            We: ['guangnianyuji', 'Huge_Black', 'bulu', 'Iuriak', 'a-little-dust', 'cicada1212', 'wukef2425', 'Karrr-Angel', 'mint3242', 'wyfjc'],
         }
     },
-    methods:{
-        flashPic(item)
-        {
-            return "/static/homeview"+item+".jpg";
+    methods: {
+        flashPic(item) {
+            return "/static/homeview" + item + ".jpg";
         },
-        go(place)
-        {
+        go(place) {
             console.log(place);
-            if(place==='login')
-            {
-                if(globalData.login)
-                {
+            if (place === 'login') {
+                if (globalData.login) {
                     ElMessage.success('您已登录！')
                     return;
                 }
             }
 
-            let pathname="/"+place;
+            let pathname = "/" + place;
             console.log(pathname);
             router.push(pathname)
         }
@@ -283,31 +288,35 @@ export default {
 };
 </script>
 <style scoped>
-
-.beian{
+.beian {
     text-align: center;
-    
-    
+
+
 }
-.el-link{
-    font-size:150%;
-    color:ghostwhite;
+
+.el-link {
+    font-size: 150%;
+    color: ghostwhite;
 }
-.footer-content{
-    color:ghostwhite;
-    font-size:100%;
-    font-weight:300;
+
+.footer-content {
+    color: ghostwhite;
+    font-size: 100%;
+    font-weight: 300;
 }
-.footer-part{
-    margin-left:10%;
+
+.footer-part {
+    margin-left: 10%;
 }
-.footer-title{
-    margin-top:20%;
-    color:ghostwhite;
-    font-size:300%;
-    font-weight:600;
+
+.footer-title {
+    margin-top: 20%;
+    color: ghostwhite;
+    font-size: 300%;
+    font-weight: 600;
 }
-.icon-circle{
+
+.icon-circle {
     width: 5vw;
     height: 5vw;
     border-radius: 50%;
@@ -315,30 +324,31 @@ export default {
 
 }
 
-.part-el-card-space{
+.part-el-card-space {
     color: #9eb4cb;
     margin: 5% 0;
 }
 
-.cardDesc{
+.cardDesc {
     height: 150px;
     max-height: 150px;
     overflow: hidden;
 }
 
-.part-el-card-title{
-    font-size:xx-large;
-    font-weight:600;
+.part-el-card-title {
+    font-size: xx-large;
+    font-weight: 600;
     margin-top: 8%;
 }
-.part-el-card{
-    border-radius:25px ;
+
+.part-el-card {
+    border-radius: 25px;
     background-color: #fff;
     padding: 40px;
-    box-shadow: 0 6px 6px rgba(36,37,38,.02);
+    box-shadow: 0 6px 6px rgba(36, 37, 38, .02);
 }
 
-.part{
+.part {
     margin: 10%;
 }
 
@@ -350,17 +360,17 @@ export default {
 .top {
     width: 100%;
     position: relative;
-    background: linear-gradient(to bottom, 
-    rgba(242, 247, 255, 1) 0%, 
-    rgba(242, 247, 255, 0.5) 80%, 
-    rgba(242, 247, 255, 0) 100%);
+    background: linear-gradient(to bottom,
+            rgba(242, 247, 255, 1) 0%,
+            rgba(242, 247, 255, 0.5) 80%,
+            rgba(242, 247, 255, 0) 100%);
     padding: 40px 0;
 }
 
 .main {
     display: flex;
     flex-direction: row;
-    
+
     align-items: center;
     justify-content: space-between;
     position: relative;
@@ -391,10 +401,10 @@ export default {
 
 .welcome {
     background-image: linear-gradient(96.14deg,
-    rgba(0, 191, 168, 1) 0%,
-    #0093bf 100%);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
+            rgba(0, 191, 168, 1) 0%,
+            #0093bf 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 
     text-align: left;
     font: 700 84px "Poppins", sans-serif;
@@ -413,7 +423,7 @@ export default {
     left: 8px;
 }
 
-.contenttext>p{
+.contenttext>p {
     margin-bottom: 5px;
 }
 
@@ -557,86 +567,97 @@ export default {
     }
 }
 
-.icon-circle{
+.icon-circle {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.icon-circle>.fi{
+
+.icon-circle>.fi {
     height: 44px;
     font-size: 40px;
 }
 
-.functionTitle{
+.functionTitle {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin: 0 0 30px 10px;
 }
 
-.functionTitle>.functionDesc{
+.functionTitle>.functionDesc {
     padding-top: 5px;
     max-width: 66%;
 }
 
-.functionRow{
+.functionRow {
     display: flex;
     gap: 5%;
 }
-.address{
+
+.address {
     margin-top: 5%;
     margin-left: 2%;
 }
-.school{
+
+.school {
     margin-top: 5%;
-    weight:200px;
-    height:100px;
+    weight: 200px;
+    height: 100px;
 }
-.logo{
+
+.logo {
     margin-left: 18%;
     margin-top: 3%;
 }
 
 .pulsate-fwd {
-	animation: pulsate-fwd 1.5s ease-in-out infinite both;
+    animation: pulsate-fwd 1.5s ease-in-out infinite both;
 }
+
 @keyframes pulsate-fwd {
-  0% {
-    transform: scale(0.9);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(0.9);
-  }
+    0% {
+        transform: scale(0.9);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(0.9);
+    }
 }
 
 .heartbeat {
-	animation: heartbeat 1.7s ease-in-out infinite both;
+    animation: heartbeat 1.7s ease-in-out infinite both;
 }
+
 @keyframes heartbeat {
-  from {
-    transform: scale(1);
-    transform-origin: center center;
-    animation-timing-function: ease-out;
-  }
-  10% {
-    transform: scale(0.91);
-    animation-timing-function: ease-in;
-  }
-  17% {
-    transform: scale(0.98);
-    animation-timing-function: ease-out;
-  }
-  33% {
-    transform: scale(0.87);
-    animation-timing-function: ease-in;
-  }
-  45% {
-    transform: scale(1);
-    animation-timing-function: ease-out;
-  }
+    from {
+        transform: scale(1);
+        transform-origin: center center;
+        animation-timing-function: ease-out;
+    }
+
+    10% {
+        transform: scale(0.91);
+        animation-timing-function: ease-in;
+    }
+
+    17% {
+        transform: scale(0.98);
+        animation-timing-function: ease-out;
+    }
+
+    33% {
+        transform: scale(0.87);
+        animation-timing-function: ease-in;
+    }
+
+    45% {
+        transform: scale(1);
+        animation-timing-function: ease-out;
+    }
 }
 </style>
-  

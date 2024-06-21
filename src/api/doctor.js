@@ -14,12 +14,27 @@ export const getDoctorInfo = async () => {
     }
 };
 
+export const getPatientInfo = async (patientId) => {
+    try {
+        const response = await request({
+            url: `/health/doctor/health-record?patient_id=${encodeURIComponent(patientId)}`,
+            method: 'GET',
+        });
+        console.log("患者信息", response);
+        return response;
+    } catch (error) {
+        console.error('获取患者信息失败:', error);
+        throw error;
+    }
+};
+
 export const getPatientList = async () => {
     try {
         const response = await request({
-            url: '/interaction/getPatientList',
+            url: '/interaction/getFollowerList',
             method: 'GET',
         });
+        console.log("患者列表", response);
         return response;
     } catch (error) {
         console.error('获取患者列表失败:', error);
@@ -47,9 +62,24 @@ export const confirmPatient = async (messageId) => {
             url: `/interaction/confirmPatient?messageId=${encodeURIComponent(messageId)}`,
             method: 'POST',
         });
+        console.error('同意申请成功:', response);
         return response;
     } catch (error) {
-        console.error('确认申请失败:', error);
+        console.error('同意申请失败:', error);
+        throw error;
+    }
+};
+
+export const discardPatient = async (messageId) => {
+    try {
+        const response = await request({
+            url: `/interaction/discardPatient?messageId=${encodeURIComponent(messageId)}`,
+            method: 'POST',
+        });
+        console.error('拒绝申请成功:', response);
+        return response;
+    } catch (error) {
+        console.error('拒绝申请失败:', error);
         throw error;
     }
 };
@@ -83,9 +113,11 @@ export const sendMessage = async (messageId, messageContent) => {
 
 export default {
     getDoctorInfo,
+    getPatientInfo,
     getPatientList,
     getApplicationList,
     confirmPatient,
+    discardPatient,
     getMessage,
     sendMessage,
 };

@@ -7,7 +7,7 @@ import UserInfoCard from "@/components/UserInfoCard.vue";
 import globalData from "@/global/global";
 import router from "@/router";
 import axios from "axios";
-import { ElMenuItem } from "element-plus";
+import { ElMenuItem, ElMessage } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 
 changeTheme("#00bfa8")
@@ -60,13 +60,12 @@ const fetchDoctorInfo = async () => {
     try {
         const response = await getDoctorInfo();
         if (response.response) {
-            isLogin.value = response.response.login;
+            isLogin.value = true;
             gotUserInfo.value = true;
-            if (!response.response.login) return;
             globalData.login = true;
-            globalData.locked = response.locked;
             userInfo.data = response.response;
             globalData.userInfo = userInfo.data;
+
         }
     } catch (error) {
         if (error.network) return;
@@ -79,7 +78,7 @@ const fetchPatientList = async () => {
         try {
             const response = await getPatientList();
             if (response.response) {
-                patientList.value = response.response.patientList;
+                patientList.value = response.response;
             }
         } catch (error) {
             console.error('Error fetching patient list', error);
@@ -92,7 +91,7 @@ const fetchApplicationList = async () => {
         try {
             const response = await getApplicationList();
             if (response.response) {
-                applicationList.value = response.response.msglist;
+                applicationList.value = response.response;
             }
         } catch (error) {
             console.error('Error fetching application list', error);
@@ -100,14 +99,28 @@ const fetchApplicationList = async () => {
     }
 };
 
+
 const handleAccept = async (messageId) => {
     try {
         const response = await confirmPatient(messageId);
         if (response) {
-            console.log('同意操作成功');
+            ElMessage.success('同意操作成功');
+            fetchApplicationList();
         }
     } catch (error) {
-        console.error('同意操作出错', error);
+        ElMessage.error('同意操作出错: ' + error);
+    }
+};
+
+const handleReject = async (messageId) => {
+    try {
+        const response = await discardPatient(messageId);
+        if (response) {
+            ElMessage.success('拒绝操作成功');
+            fetchApplicationList();
+        }
+    } catch (error) {
+        ElMessage.error('拒绝操作出错: ' + error);
     }
 };
 
@@ -140,8 +153,10 @@ onMounted(() => {
                 </LinkButtonWithIcon>
             </div>
 
-            <el-dialog v-model="helpVisible" title="好友申请列表" width="50%" draggable>
+            <el-dialog v-model="helpVisible" title="好友申请列表" width="80%" draggable>
                 <el-table :data="applicationList" style="width: 100%">
+                    <el-table-column prop="messageId" label="消息ID" width="300" />
+                    <el-table-column prop="patientId" label="患者ID" width="150" />
                     <el-table-column prop="patientName" label="患者姓名" width="300" />
                     <el-table-column prop="patientAvatar" label="患者头像" width="150">
                         <template #default="{ row }">
@@ -152,8 +167,9 @@ onMounted(() => {
                     <el-table-column fixed="right" label="操作" width="200">
                         <template #default="{ row }">
                             <el-button link type="primary" size="small"
-                                @click="handleAccept(row.messageId, doctorId)">同意</el-button>
-                            <!-- <el-button link type="danger" size="small" @click="handleReject(row)">拒绝</el-button> -->
+                                @click="handleAccept(row.messageId)">同意</el-button>
+                            <el-button link type="danger" size="small"
+                                @click="handleReject(row.messageId)">拒绝</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -174,7 +190,7 @@ onMounted(() => {
                     <UserInfoCard :user-info="userInfo.data" showAvatarBorder @click="avatarClicked"></UserInfoCard>
                 </div>
 
-                <el-menu v-if="isLogin" class="sideBarMenu" ref="menu">
+                <el-menu class="sideBarMenu" ref="menu">
                     <component v-for=" patient in patientList" :is="ElMenuItem" :index="patient.patientId"
                         @click="patientClicked(patient)">
                         <template #title>

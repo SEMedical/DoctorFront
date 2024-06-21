@@ -13,8 +13,8 @@ const httpInstance = axios.create({
 httpInstance.interceptors.request.use(config => {
     const token = localStorage.getItem('jwt_token');
     if (token) {
-        config.headers['Authorization'] = `Bearer ${token}`;//用于apifox
-        //config.headers['Authorization'] = `${token}`;
+        //config.headers['Authorization'] = `Bearer ${token}`;//用于apifox
+        config.headers['Authorization'] = `${token}`;
     }
     return config
 }, e => Promise.reject(e))
