@@ -172,10 +172,12 @@
 
 <script>
 import { getPatientInfo } from '@/api/doctor';
+import { getDayBloodSugarData } from '@/api/doctor'
 //import axios from "axios";
 import { ref } from "vue";
 import ECharts from 'vue-echarts';
 import router from "../router";
+import axios from "axios";
 
 export default {
     name: "glycemia.vue",
@@ -212,6 +214,8 @@ export default {
     mounted() {
         this.getParams()
         this.getPatientMsg()
+        this.getTodayBloodSugarData()
+        //this.getSportsData()
     },
     watch: {
         '$route'(to, from) {
@@ -341,33 +345,44 @@ export default {
                 }
             }
         },
-        getTodayBloodSugarData() {
-            // 获取血糖数据
-            axios.get("/api/glycemia/doctor/dailyHistory", {
-                params: {
-                    date: this.startDate,
-                    payient_id: this.patientId
-                }
-            }).then(response => {
-                let responseObj = response.json
-                this.highStatistic = responseObj.response.highSta.toFixed(2);
-                this.normalStatistic = responseObj.response.normalSta.toFixed(2);
-                this.lowStatistic = responseObj.response.lowSta.toFixed(2);
-                this.bloodSugar = [];
-                responseObj.response.entry.forEach(item => {
-                    console.log("daytime:", item.time)
-                    console.log("dayvalue:", item.value)
-                    const time = item.time; // 直接访问 item 对象的 time 属性
-                    const value = item.value; // 直接访问 item 对象的 value 属性
-                    this.bloodSugar.push({ time: time, value: value });
-                });
-                // 获取数据完毕，接下来进行绘图
-                this.drawBDChart();
-            }).catch(error => {
-                console.error('获取日血糖数据时出错：' + error);
-                if (error.network) return
+        async getTodayBloodSugarData() {
+            try {
+                console.log()
+                const response = await getDayBloodSugarData(this.startDate,this.patientId)
+                let responseObj = response; // 修正为 response.data 而不是 response.json
+                console.log("患者基本信息 responseObj 为：", responseObj);
+
+            } catch (error) {
+                console.error('获取患者日血糖信息时出错：', error);
+                if (error.network) return;
                 error.defaultHandler();
-            })
+            }
+            // 获取血糖数据
+            // axios.get("/api/glycemia/doctor/dailyHistory", {
+            //     params: {
+            //         date: this.startDate,
+            //         patient_id: this.patientId
+            //     }
+            // }).then(response => {
+            //     let responseObj = response.json
+            //     this.highStatistic = responseObj.response.highSta.toFixed(2);
+            //     this.normalStatistic = responseObj.response.normalSta.toFixed(2);
+            //     this.lowStatistic = responseObj.response.lowSta.toFixed(2);
+            //     this.bloodSugar = [];
+            //     responseObj.response.entry.forEach(item => {
+            //         console.log("daytime:", item.time)
+            //         console.log("dayvalue:", item.value)
+            //         const time = item.time; // 直接访问 item 对象的 time 属性
+            //         const value = item.value; // 直接访问 item 对象的 value 属性
+            //         this.bloodSugar.push({ time: time, value: value });
+            //     });
+            //     // 获取数据完毕，接下来进行绘图
+            //     this.drawBDChart();
+            // }).catch(error => {
+            //     console.error('获取日血糖数据时出错：' + error);
+            //     if (error.network) return
+            //     error.defaultHandler();
+            // })
         },
         getCurrentDate() {
             // 获取当前日期并格式化为 YYYY-MM-DD
