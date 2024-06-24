@@ -102,13 +102,19 @@
         <!--展示信息的分栏，分栏2：血糖情况-->
         <div>
             <el-card class="cardStyle">
+
                 <el-row class="BL_title">
                     <div class="viewTitle tracking-in-expand" style="padding-top: 3px">血糖数据图</div>
                     <div style="color: #9eb4cb; " class="functionDesc">
                         您可以在这里查看患者在特定时间段的的血糖数据。
                     </div>
                 </el-row>
-
+                <el-alert
+                        class="alertClass"
+                        v-if = "showAlert"
+                        :title= this.title
+                        type="warning">
+                </el-alert>
                 <div class="filter-drug-box">
                     <el-card class="box-card">
                         <el-row>
@@ -142,6 +148,8 @@
                     </el-form-item>
 
                 </el-dialog>
+
+
 
                 <div class="BDGraphic">
                     <div id="main" style="width: 100%; height: 500px"></div>
@@ -197,6 +205,9 @@ export default {
             seriesName: "Blood Sugar",
             sportsData: [],
             patientId: ref([]),
+            showAlert : false,
+            delayTime : 3000,
+            title:"今天暂无可查询的血糖值",
             patientMsg: {
                 name: '',    // 患者姓名
                 gender: '',   // 患者性别
@@ -245,23 +256,37 @@ export default {
                 case 0: {
                     // 代表选择了“日”
                     try {
+                        // 替换斜线为破折号，并调整位置
+                        this.startDate= this.startDate.replace(/\//g, '-').replace(/-(\d{2})-(\d{2})-/, '$1-$2-');
+                        console.log("选择的时间是：",this.startDate)
                         const response = await getDayBloodSugarData(this.startDate,this.patientId)
                         let responseObj = response;
                         console.log("患者某日血糖 responseObj 为：", responseObj);
-                        this.highStatistic = responseObj.response.highSta;
-                        console.log("524643",this.highStatistic)
-                        this.normalStatistic = responseObj.response.normalSta;
-                        this.lowStatistic = responseObj.response.lowSta;
-                        this.bloodSugar = [];
-                        responseObj.response.entry.forEach(item => {
-                            console.log("daytime:", item.time)
-                            console.log("dayvalue:", item.value)
-                            const time = item.time; // 直接访问 item 对象的 time 属性
-                            const value = item.value; // 直接访问 item 对象的 value 属性
-                            this.bloodSugar.push({ time: time, value: value });
-                        });
-                        // 获取数据完毕，接下来进行绘图
-                        this.drawBDChart();
+                        console.log("是否为空数组：",responseObj.response.entry.length)
+                        if(responseObj.response.entry.length === 0){
+                            console.log("为空");
+                            this.title = "您选择的这天暂无可查看的血糖数据";
+                            this.showAlert = true;
+                            setTimeout(() => {
+                                this.showAlert = false;
+                            }, this.delayTime);
+                        }
+                        else {
+                            this.highStatistic = responseObj.response.highSta.toFixed(2);
+                            console.log("524643",this.highStatistic)
+                            this.normalStatistic = responseObj.response.normalSta.toFixed(2);
+                            this.lowStatistic = responseObj.response.lowSta.toFixed(2);
+                            this.bloodSugar = [];
+                            responseObj.response.entry.forEach(item => {
+                                const time = Object.keys(item)[0]; // 获取键作为时间
+                                const value = item[time]; // 获取对应的值
+                                console.log("time:", time);
+                                console.log("value:", value);
+                                this.bloodSugar.push({ time: time, value: value });
+                            });
+                            // 获取数据完毕，接下来进行绘图
+                            this.drawBDChart();
+                        }
                     } catch (error) {
                         console.error('获取患者日血糖信息时出错：', error);
                         if (error.network) return;
@@ -272,25 +297,39 @@ export default {
                 case 1: {
                     // 代表选择了“周”
                     try {
+                        // 替换斜线为破折号，并调整位置
+                        this.startDate= this.startDate.replace(/\//g, '-').replace(/-(\d{2})-(\d{2})-/, '$1-$2-');
+                        console.log("选择的时间是：",this.startDate)
                         const response = await getWeekOrMonthBloodSugarData('week',this.startDate,this.patientId)
                         let responseObj = response;
-                        console.log("responseObj.response:", responseObj)
-                        console.log("responseObj.response.hyperPercentage:", responseObj.response.hyper_percent)
-                        this.highStatistic = responseObj.response.hyper_percent.toFixed(2);
-                        this.lowStatistic = responseObj.response.hypo_percent.toFixed(2);
-                        this.normalStatistic = responseObj.response.eu_percent.toFixed(2);
-                        this.bloodSugar = [];
-                        responseObj.response.entry.forEach(item => {
-                            console.log("weektime:", item.time)
-                            console.log("min value:", item.min_val)
-                            console.log("max value:", item.max_val)
-                            const time = item.time; // 直接访问 item 对象的 time 属性
-                            const min_val = item.min_val; // 直接访问 item 对象的 value 属性
-                            const max_val = item.max_val;
-                            this.bloodSugar.push({ time: time, min_val: min_val, max_val: max_val });
-                        });
-                        // 获取数据完毕，接下来进行绘图
-                        this.drawBDChart();
+                        console.log("responseObj:", responseObj)
+                        console.log("responseObj.response.hyperPercentage:", responseObj.response.hyperglycemiaPercentage)
+                        if(responseObj.response.data.length === 0){
+                            console.log("为空");
+                            this.title = "您选择的周暂无可查看的血糖数据";
+                            this.showAlert = true;
+                            setTimeout(() => {
+                                this.showAlert = false;
+                            }, this.delayTime);
+                        }
+                        else {
+                            this.highStatistic = responseObj.response.hyperglycemiaPercentage.toFixed(2);
+                            this.lowStatistic = responseObj.response.hypoglycemiaPercentage.toFixed(2);
+                            this.normalStatistic = responseObj.response.euGlycemiaPercentage.toFixed(2);
+                            this.bloodSugar = [];
+                            responseObj.response.data.forEach(item => {
+                                const time = Object.keys(item)[0]; // 获取键作为时间
+                                console.log("weektime:", time)
+                                const value = item[time];
+                                const min_val = value.minValue; // 获取对应的值
+                                const max_val = value.maxValue; // 获取对应的值
+                                console.log("min value:", min_val)
+                                console.log("max value:", max_val)
+                                this.bloodSugar.push({time: time, min_val: min_val, max_val: max_val});
+                            });
+                            // 获取数据完毕，接下来进行绘图
+                            this.drawBDChart();
+                        }
                     } catch (error) {
                         console.error('获取患者周血糖信息时出错：', error);
                         if (error.network) return;
@@ -301,23 +340,37 @@ export default {
                 case 2: {
                     // 代表选择了“月”
                     try {
+                        // 替换斜线为破折号，并调整位置
+                        this.startDate= this.startDate.replace(/\//g, '-').replace(/-(\d{2})-(\d{2})-/, '$1-$2-');
+                        console.log("选择的时间是：",this.startDate)
                         const response = await getWeekOrMonthBloodSugarData('month',this.startDate,this.patientId)
                         let responseObj = response;
-                        this.highStatistic = responseObj.response.hyper_percent.toFixed(2);
-                        this.lowStatistic = responseObj.response.hypo_percent.toFixed(2);
-                        this.normalStatistic = responseObj.response.eu_percent.toFixed(2);
-                        this.bloodSugar = [];
-                        responseObj.response.entry.forEach(item => {
-                            console.log("month time:", item.time)
-                            console.log("min value:", item.min_val)
-                            console.log("max value:", item.max_val)
-                            const time = item.time; // 直接访问 item 对象的 time 属性
-                            const min_val = item.min_val; // 直接访问 item 对象的 value 属性
-                            const max_val = item.max_val;
-                            this.bloodSugar.push({ time: time, min_val: min_val, max_val: max_val });
-                        });
-                        // 获取数据完毕，接下来进行绘图
-                        this.drawBDChart();
+                        if(responseObj.response.data.length === 0){
+                            console.log("为空");
+                            this.title = "您选择的月暂无可查看的血糖数据";
+                            this.showAlert = true;
+                            setTimeout(() => {
+                                this.showAlert = false;
+                            }, this.delayTime);
+                        }
+                        else {
+                            this.highStatistic = responseObj.response.hyperglycemiaPercentage.toFixed(2);
+                            this.lowStatistic = responseObj.response.hypoglycemiaPercentage.toFixed(2);
+                            this.normalStatistic = responseObj.response.euGlycemiaPercentage.toFixed(2);
+                            this.bloodSugar = [];
+                            responseObj.response.data.forEach(item => {
+                                const time = Object.keys(item)[0]; // 获取键作为时间
+                                console.log("month time:", time)
+                                const value = item[time];
+                                const min_val = value.minValue; // 获取对应的值
+                                const max_val = value.maxValue; // 获取对应的值
+                                console.log("month value:", min_val)
+                                console.log("month value:", max_val)
+                                this.bloodSugar.push({ time: time, min_val: min_val, max_val: max_val });
+                            });
+                            // 获取数据完毕，接下来进行绘图
+                            this.drawBDChart();
+                        }
                     } catch (error) {
                         console.error('获取患者月血糖信息时出错：', error);
                         if (error.network) return;
@@ -334,20 +387,29 @@ export default {
             try {
                 const response = await getDayBloodSugarData(this.startDate,this.patientId)
                 let responseObj = response;
-                console.log("患者今日血糖 responseObj 为：", responseObj.response.highSta);
-                this.highStatistic = responseObj.response.highSta.toFixed(2);
-                this.normalStatistic = responseObj.response.normalSta.toFixed(2);
-                this.lowStatistic = responseObj.response.lowSta.toFixed(2);
-                this.bloodSugar = [];
-                responseObj.response.entry.forEach(item => {
-                    console.log("daytime:", item.time)
-                    console.log("dayvalue:", item.value)
-                    const time = item.time; // 直接访问 item 对象的 time 属性
-                    const value = item.value; // 直接访问 item 对象的 value 属性
-                    this.bloodSugar.push({ time: time, value: value });
-                });
-                // 获取数据完毕，接下来进行绘图
-                this.drawBDChart();
+                if(responseObj.response.entry.length === 0){
+                    console.log("为空");
+                    this.showAlert = true;
+                    setTimeout(() => {
+                        this.showAlert = false;
+                    }, this.delayTime);
+                }
+                else {
+                    console.log("患者今日血糖 responseObj 为：", responseObj.response.highSta);
+                    this.highStatistic = responseObj.response.highSta.toFixed(2);
+                    this.normalStatistic = responseObj.response.normalSta.toFixed(2);
+                    this.lowStatistic = responseObj.response.lowSta.toFixed(2);
+                    this.bloodSugar = [];
+                    responseObj.response.entry.forEach(item => {
+                        const time = Object.keys(item)[0]; // 获取键作为时间
+                        const value = item[time]; // 获取对应的值
+                        console.log("time:", time);
+                        console.log("value:", value);
+                        this.bloodSugar.push({ time: time, value: value });
+                    });
+                    // 获取数据完毕，接下来进行绘图
+                    this.drawBDChart();
+                }
             } catch (error) {
                 //console.error('获取患者日血糖信息时出错：', error);
                 if (error.network) return;
@@ -745,7 +807,13 @@ export default {
 .select-item {
     padding-top: 0px;
 }
-
+.alertClass {
+    margin-bottom: 10px;
+    margin-bottom: 5px;
+    justify-content: center;
+    width: 500px;
+    margin-left: 320px
+}
 .box-card {
     width: 90%;
     margin-left: 5%;
