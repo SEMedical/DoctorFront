@@ -836,7 +836,6 @@ export default {
     margin-top: 10px;
     margin-left: 90%;
 }
-
 /*边框样式设置*/
 .cardStyle {
     border-color: white;

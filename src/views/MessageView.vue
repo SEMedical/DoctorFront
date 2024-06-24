@@ -57,6 +57,7 @@ export default {
     mounted() {
         this.getParams()
         this.fetchMessageData(this.patientId);
+        console.log("发消息")
     },
     methods: {
         getParams() {

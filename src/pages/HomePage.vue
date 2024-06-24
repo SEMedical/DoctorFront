@@ -29,6 +29,11 @@ const avatarClicked = () => {
     }
 }
 
+const logoClicked = () => {
+    console.log(("点击了logo"))
+    router.push("/")
+}
+
 const patientClicked = (patient) => {
     console.log("Clicked patient:", patient);
     router.push(`/Patient/${patient.patientId}`);
@@ -40,7 +45,7 @@ let userInfo = reactive({
         user_name: "未登录",
         user_id: 123456,
         user_group: "none",
-        avatar_url: "/static/defaultAvatar.png",
+        avatar_url: "/src/assets/mainPage1.png",
         title: "",
         department: "",
         hospital_name: "",
@@ -65,7 +70,6 @@ const fetchDoctorInfo = async () => {
             globalData.login = true;
             userInfo.data = response.response;
             globalData.userInfo = userInfo.data;
-
         }
     } catch (error) {
         if (error.network) return;
@@ -137,7 +141,7 @@ onMounted(() => {
     <div class="pageWrapper">
         <div class="headerHolder">
             <div class="leftTitle">
-                <img alt="" src="/static/logo.png">
+                <img alt="" src="/src/assets/logo.png" @click="logoClicked">
                 <!--                <SearchBox @searchStart="searchStart"></SearchBox>-->
             </div>
             <div class="rightTitle" v-if="!isLogin">

@@ -3,29 +3,18 @@
         <div class="top">
             <div class="top-back"></div>
 
-            <div class="main">
+            <div class="main" style="height: 700px">
                 <div class="text-content">
                     <div class="main-welcome">
                         <div class="welcome animate__animated animate__fadeInTopRight">Welcome To<br />糖小智</div>
 
                         <div class="contenttext  animate__animated animate__fadeInBottomLeft">
-                            <p>探寻健康之门，启程HelloHealth</p>
-                            <p>加入我们，赋予生命更多的关爱与呵护</p>
-                            <p>与全球健康爱好者一起，开启身体心灵的奇妙旅程</p>
+                            <p>探寻健康之门，启程糖小智</p>
+                            <p>加入我们，赋予糖尿病患者更多的关爱与呵护</p>
+<!--                            <p>与全球健康爱好者一起，开启身体心灵的奇妙旅程</p>-->
                         </div>
                     </div>
 
-                    <!-- <button class="btn animate__animated animate__bounceIn" @click="go('login')">
-                        <div>登录 / 注册</div>
-                        <svg fill="none" viewBox="0 0 24 24" height="25px" width="25px" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"
-                                  stroke="white" d="M11.6801 14.62L14.2401 12.06L11.6801 9.5"></path>
-                            <path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"
-                                  stroke="white" d="M4 12.0601H14.17"></path>
-                            <path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"
-                                  stroke="white" d="M12 4C16.42 4 20 7 20 12C20 17 16.42 20 12 20"></path>
-                        </svg>
-                    </button> -->
                 </div>
 
                 <svg class="vector animate__animated animate__jackInTheBox" width="600" height="600"
@@ -42,141 +31,6 @@
             </div>
         </div>
 
-        <div class="part">
-
-            <el-row style="display: flex; align-items: center;">
-                <el-col :span="18">
-                    <NewsCarousel />
-                    <!--
-                    <el-carousel >
-                        <el-carousel-item v-for="item in 4" :key="item">
-                            <img :src="flashPic(item)" style="width:100%;height: 100%;border-radius: 50px;">
-                        </el-carousel-item>
-                    </el-carousel>
-                    -->
-                </el-col>
-                <el-col :span="2"></el-col>
-                <el-col :span="4">
-                    <div style="margin-left: 10%;margin-top:10%;">
-                        <div style="font-size: xx-large;">
-                            <b>健康资讯</b>
-                        </div>
-
-                        <div style="margin-top:1%;color: #9eb4cb; ">
-                            为您推荐最新的医疗健康讯息
-                        </div>
-
-                        <div style="margin-top:5%; ">
-                            <button class="detailButton" @click="go('news')">
-                                <i class="fi fi-rr-books"></i> &nbsp;&nbsp;点击进入
-                                <div class="detailHoverEffect">
-                                    <div>
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
-
-                    </div>
-
-                </el-col>
-
-
-            </el-row>
-
-        </div>
-
-
-        <div class="part">
-            <div class="functionTitle">
-                <div style="font-size: xx-large;">
-                    <b>特色功能</b>
-                </div>
-
-                <div style="color: #9eb4cb; " class="functionDesc">
-                    我们提供全方位、用户友好的健康管理和交流平台。通过HH找药查看和收藏药品信息；通过健康日历便捷管理健康日程，设置提醒，记录体征数据；在HH论坛参与社区互动。
-                </div>
-
-            </div>
-
-            <div class="functionRow">
-                <el-row :gutter="30">
-                    <el-col :span="8">
-                        <div class="part-el-card">
-                            <div class="icon-circle pulsate-fwd" style="background-color: #f3effb">
-                                <i class="fi fi-rs-medicine" style="color:#c6b4e8"></i>
-                            </div>
-                            <div class="part-el-card-title">
-                                HH找药
-                            </div>
-                            <div class="part-el-card-space cardDesc">
-                                <p>药品库的详细分类，结合智能推荐，为您快速定位查询所需药品。</p>
-                                <p>收藏您常用和感兴趣的药品，打造您的专属药品库。</p>
-                            </div>
-
-                            <div class="part-el-card-space" style="text-align: center;">
-                                <button class="detailButton" @click="go('medicine')">
-                                    <i class="fi-rr-capsules"></i> &nbsp;&nbsp;点击进入
-                                    <div class="detailHoverEffect">
-                                        <div></div>
-                                    </div>
-                                </button>
-                            </div>
-                        </div>
-                    </el-col>
-
-                    <el-col :span="8">
-                        <div class="part-el-card">
-                            <div class="icon-circle pulsate-fwd" style="background-color: #eaf7f0">
-                                <i class="fi fi-rr-pulse" style="color:#64c58d"></i>
-                            </div>
-
-                            <div class="part-el-card-title">
-                                健康日程管理
-                            </div>
-                            <div class="part-el-card-space cardDesc">
-                                <p>在日历中管理您的每日健康事项：饮食、运动、服药、医嘱提示...</p>
-                                <p>设置HH健康助手跟踪您的事项完成情况，一切尽在掌握。</p>
-                            </div>
-                            <div class="part-el-card-space" style="text-align: center;">
-                                <button class="detailButton" @click="go('calendar')">
-                                    <i class="fi-rr-calendar-clock"></i> &nbsp;&nbsp;点击进入
-                                    <div class="detailHoverEffect">
-                                        <div></div>
-                                    </div>
-                                </button>
-                            </div>
-                        </div>
-                    </el-col>
-
-                    <el-col :span="8">
-                        <div class="part-el-card">
-                            <div class="icon-circle pulsate-fwd" style="background-color: #ebf3fe">
-                                <i class="fi fi-rs-syringe" style="color:#2f80ed"></i>
-                            </div>
-
-                            <div class="part-el-card-title">
-                                HH论坛
-                            </div>
-                            <div class="part-el-card-space cardDesc">
-                                <p>发布您的提问或者分享您的经验，具有专业医生资质的用户将为您答疑解惑。</p>
-                                <p>为优质帖子点赞、收藏、投币，参与社区互动，共享信息，建立联系。</p>
-                            </div>
-                            <div class="part-el-card-space" style="text-align: center;">
-                                <button class="detailButton" @click="go('forum')">
-                                    <i class="fi-rr-user-md-chat"></i> &nbsp;&nbsp;点击进入
-                                    <div class="detailHoverEffect">
-                                        <div></div>
-                                    </div>
-                                </button>
-                            </div>
-                        </div>
-                    </el-col>
-
-                </el-row>
-            </div>
-
-        </div>
-
         <div>
             <div style="background-color: #00bfa8;">
                 <el-row style="width: 95%; margin: 0 auto;">
@@ -184,9 +38,9 @@
                         <div class="footer-part">
 
                             <div class="footer-title">
-                                HelloHealth
+                                ღ 糖小智 ღ
                             </div>
-                            <img src="/static/logo2.png" class="logo heartbeat">
+<!--                            <img src="/static/logo2.png" class="logo heartbeat">-->
                         </div>
                     </el-col>
 
@@ -229,23 +83,23 @@
                 </el-row>
 
                 <el-divider />
-                <div class="beian">
-                    <el-link href="https://beian.miit.gov.cn/" target="_blank" type="info">赣ICP备2023008902号-1</el-link>
-                </div>
+<!--                <div class="beian">-->
+<!--                    <el-link href="https://beian.miit.gov.cn/" target="_blank" type="info">赣ICP备2023008902号-1</el-link>-->
+<!--                </div>-->
 
                 <div>
                     <br />
                 </div>
 
-                <div class="beian">
-                    <a target="_blank" href=" "
-                        style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
-                        <img src="/static/photo.jpg" style="float:left;" />
-                        <p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">赣公网安备
-                            36112802000130号</p>
+<!--                <div class="beian">-->
+<!--                    <a target="_blank" href=" "-->
+<!--                        style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">-->
+<!--                        <img src="/static/photo.jpg" style="float:left;" />-->
+<!--                        <p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">赣公网安备-->
+<!--                            36112802000130号</p>-->
 
-                    </a>
-                </div>
+<!--                    </a>-->
+<!--                </div>-->
             </div>
         </div>
 
@@ -264,7 +118,7 @@ export default {
     data() {
 
         return {
-            We: ['guangnianyuji', 'Huge_Black', 'bulu', 'Iuriak', 'a-little-dust', 'cicada1212', 'wukef2425', 'Karrr-Angel', 'mint3242', 'wyfjc'],
+            We: ['VictorHuu', 'DaenerysTar', 'tuesaime', 'Karry-Angel'],
         }
     },
     methods: {
