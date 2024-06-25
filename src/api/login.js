@@ -17,4 +17,16 @@ export const loginAPI = async (userInfo) => {
 	}
 };
 
+export const logout = async () => {
+	try {
+		console.log("尝试登出")
+		const response = await request ({
+			url:`/login/logout`,
+			method:'DELETE',
+		})
+		console.log("已登出" + response.response)
+	} catch(error) {
+		console.log("登出失败" + error)
+	}
+}
 export default loginAPI;

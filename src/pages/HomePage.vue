@@ -9,6 +9,7 @@ import router from "@/router";
 import axios from "axios";
 import { ElMenuItem, ElMessage } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
+import {logout} from "../api/login";
 
 changeTheme("#00bfa8")
 function loginButtonClicked() {
@@ -16,8 +17,12 @@ function loginButtonClicked() {
 }
 
 const exitButtonClicked = async () => {
-    await axios.get("/api/Login/Logout")
-    window.location.href = "/";
+    try {
+        await logout();
+        router.push("/login")
+    } catch (error) {
+        console.log("登出失败")
+    }
 }
 
 const avatarClicked = () => {
