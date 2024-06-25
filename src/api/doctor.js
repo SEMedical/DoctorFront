@@ -114,7 +114,7 @@ export const sendMessage = async (messageId, messageContent) => {
 export const getSportsData = async (patientId) => {
     try {
         const response = await request({
-            url:`/sports/doctor/sportRecord?patient_id=${encodeURIComponent(patientId)}`,
+            url:`/sports/doctor/sportRecord?user_id=${encodeURIComponent(patientId)}`,
             method:'GET',
         })
         console.log("运动数据为：",response)

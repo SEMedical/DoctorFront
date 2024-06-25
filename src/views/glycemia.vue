@@ -179,7 +179,7 @@
 </template>
 
 <script>
-import { getPatientInfo,getDayBloodSugarData,getWeekOrMonthBloodSugarData } from '@/api/doctor';
+import { getPatientInfo,getDayBloodSugarData,getWeekOrMonthBloodSugarData,getSportsData } from '@/api/doctor';
 //import axios from "axios";
 import { ref } from "vue";
 import ECharts from 'vue-echarts';
@@ -226,7 +226,7 @@ export default {
         this.getParams()
         this.getPatientMsg()
         this.getTodayBloodSugarData()
-        //this.getSportsData()
+        this.getSportsData()
     },
     watch: {
         '$route'(to, from) {
@@ -634,26 +634,18 @@ export default {
                 }
             }
         },
-        getSportsData() {
-            // 获取运动数据
-            console.log("get sports data")
-            // 获取数据
-            axios.get("/api/sports/doctor/sportRecord", {
-                params: {
-                    patient_id: this.patientId
-                }
-            }).then(response => {
-                let responseObj = response.json
-                console.log("sports data111:", responseObj)
-                this.sportsData = responseObj.response.minute_record;
+        async getSportsData() {
+            try {
+                console.log("get sports data")
+                const response = await getSportsData(this.patientId);
+                console.log("这边获取到的运动数据是:" + response.response.minute_record);
+                this.sportsData =  response.response.minute_record;
                 console.log("一周内运动的分钟数：", this.sportsData);
                 // 数据获取完毕，画图
                 this.drawSportsChart()
-            }).catch(error => {
-                console.error('获取运动数据时出错：' + error);
-                if (error.network) return
-                error.defaultHandler();
-            })
+            } catch(error) {
+                console.log("获取运动数据时出错" + error);
+            }
         },
         drawSportsChart() {
             // 画运动周报图

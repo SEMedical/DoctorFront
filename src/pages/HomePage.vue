@@ -68,7 +68,13 @@ const fetchDoctorInfo = async () => {
             isLogin.value = true;
             gotUserInfo.value = true;
             globalData.login = true;
-            userInfo.data = response.response;
+            // userInfo.data = response.response;
+            // 只更新除了 avatar_url 之外的其他用户信息
+            Object.keys(userInfo.data).forEach(key => {
+                if (key !== 'avatar_url') {
+                    userInfo.data[key] = response.response[key];
+                }
+            });
             globalData.userInfo = userInfo.data;
         }
     } catch (error) {
@@ -198,7 +204,7 @@ onMounted(() => {
                     <component v-for=" patient in patientList" :is="ElMenuItem" :index="patient.patientId"
                         @click="patientClicked(patient)">
                         <template #title>
-                            <img :src="patient.patientAvatar" alt="Patient Avatar">
+<!--                            <img :src="patient.patientAvatar" alt="Patient Avatar">-->
                             <span>{{ patient.patientName }}</span>
                         </template>
                     </component>
